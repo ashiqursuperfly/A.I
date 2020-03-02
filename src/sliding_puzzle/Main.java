@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ProblemSolver {
+public class Main {
 
     private static String FILE_NAME = "in.txt";
 
@@ -18,7 +18,7 @@ public class ProblemSolver {
 
             for (int i = 0; i < nOfTestCases; i++) {
                 line = br.readLine();
-                new Board(line.split(",")).solve();
+                new SlidingTileProblemSolver(line.split(","), Consts.Heuristics.MANHATTAN);
             }
 
 
