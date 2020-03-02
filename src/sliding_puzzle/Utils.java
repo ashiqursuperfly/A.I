@@ -53,4 +53,23 @@ public class Utils {
         }
         return heuristicsVal;
     }
+
+    public static int findManhattanHeuristicsValue(Board currentNode) {
+        int size = currentNode.currentState[0].length, heuristicsVal = 0;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+
+                var goalI = (currentNode.currentState[i][j].goalPosition / size);
+                if (currentNode.currentState[i][j].goalPosition % size == 0) goalI--;
+                var goalJ = (currentNode.currentState[i][j].goalPosition - 1) % size;
+
+                // System.out.println(currentNode.currentState[i][j].goalPosition + " " + (goalI) + " " + goalJ);
+                heuristicsVal += (Math.abs(goalI - i) + Math.abs(goalJ - j));
+            }
+        }
+        return heuristicsVal;
+    }
+
+
 }

@@ -11,11 +11,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 class BoardTest {
 
     private static final String FILE_NAME = "test_input";
     private static SlidingTileProblemSolver[] problems;
-
 
     @BeforeAll
     static void init() {
@@ -32,9 +34,9 @@ class BoardTest {
                 System.out.println(problems[i]);
             }
 
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            fail("Error: Reading test input file:"+FILE_NAME);
         }
 
 
@@ -43,11 +45,27 @@ class BoardTest {
     @Test
     void findBasicHeuristics(){
 
-        for (SlidingTileProblemSolver s : problems) {
+        int [] expected = new int[]{2,4,15};
+
+        for (int i = 0; i < problems.length; i++) {
+            SlidingTileProblemSolver s = problems[i];
             var v = Utils.findBasicHeuristicsValue(s.solutionSteps.get(0));
+            assertEquals(expected[i],v);
+        }
+    }
+
+    @Test
+    void findManhattanHeuristics(){
+
+        //int [] expected = new int[]{2,4,15};
+
+        for (int i = 0; i < problems.length; i++) {
+            SlidingTileProblemSolver s = problems[i];
+            var v = Utils.findManhattanHeuristicsValue(s.solutionSteps.get(0));
             System.out.println(v);
         }
     }
+
 
 
 }

@@ -10,3 +10,4 @@ basic_heuristics
 15
 
 manhattan_heuristics
+3,2,8,4,5,6,7,1,0 --> 8

@@ -8,7 +8,6 @@ public class SlidingTileProblemSolver {
     private final Consts.Heuristics heuristic;
     public List<Board> solutionSteps;
 
-
     public SlidingTileProblemSolver(String[] puzzledListOfValues, Consts.Heuristics manhattan) {
         this.heuristic = manhattan;
 
