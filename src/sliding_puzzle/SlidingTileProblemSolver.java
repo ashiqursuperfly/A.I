@@ -15,7 +15,13 @@ public class SlidingTileProblemSolver {
         solutionSteps.add(new Board(puzzledListOfValues));
     }
 
-    public void solve(){}
+    public void solve() {
+
+    }
+
+    public void applyMove(Consts.Moves move){
+        solutionSteps.get(solutionSteps.size()-1).applyMove(move);
+    }
 
     private String[] generateGoalStateList(int n){
 

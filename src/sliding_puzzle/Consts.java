@@ -1,16 +1,25 @@
 package sliding_puzzle;
 
-public class Consts {
+public enum  Consts {
+
+    BLANK("0");
+
+    public String value;
+
+    Consts(String value) {
+            this.value = value;
+        }
+
     public enum Heuristics {
         MANHATTAN, SIMPLE
     }
 
-    public enum BoardConsts {
-        BLANK("0"), UP("U"), DOWN("D"), L("L"), R("R");
+    public enum Moves {
+        UP("U"), DOWN("D"), LEFT("L"), RIGHT("R");
 
         public String value;
 
-        BoardConsts(String value) {
+        Moves(String value) {
             this.value = value;
         }
     }

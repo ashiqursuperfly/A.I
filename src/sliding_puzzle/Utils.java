@@ -1,5 +1,7 @@
 package sliding_puzzle;
 
+import kotlin.Pair;
+
 public class Utils {
 
     public static boolean isBoardDimensionsValid(int n, Tile[][] board) {
@@ -17,28 +19,30 @@ public class Utils {
         return true;
     }
 
-    public static Tile[][] constructBoardFromSequence(String[] puzzledListOfValues) {
+    public static Pair<Tile[][], Position> constructBoardFromSequence(String[] puzzledListOfValues) {
         var size = (int) Math.sqrt(puzzledListOfValues.length + 1);
 
-        var board = new Tile[size][size];
+        var initialState = new Tile[size][size];
+        var blankPos = new Position();
 
-        if (!isBoardDimensionsValid(puzzledListOfValues.length - 1, board)) return null;
+        if (!isBoardDimensionsValid(puzzledListOfValues.length - 1, initialState)) return null;
 
         int row = 0;
         for (int k = 0; k < puzzledListOfValues.length; k++) {
-
             var goal = 0;
-            if (puzzledListOfValues[k].equals(Consts.BoardConsts.BLANK.value)) {
+            if (puzzledListOfValues[k].equals(Consts.BLANK.value)) {
                 goal = puzzledListOfValues.length;
+                blankPos.row = row;
+                blankPos.col = k - row * size;
+
             } else goal = Integer.parseInt(puzzledListOfValues[k]);
 
-            board[row][k - row * size] = new Tile(goal);
-
+            initialState[row][k - row * size] = new Tile(goal);
 
             if ((k + 1) % size == 0) row++;
         }
 
-        return board;
+        return new Pair<>(initialState, blankPos);
     }
 
     public static int findBasicHeuristicsValue(Board currentNode) {
