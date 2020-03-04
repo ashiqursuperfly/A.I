@@ -1,6 +1,8 @@
-package sliding_puzzle;
+package sliding_puzzle.puzzle;
 
 import kotlin.Pair;
+import sliding_puzzle.data.Consts;
+import sliding_puzzle.data.Position;
 
 import java.util.Arrays;
 
@@ -13,7 +15,7 @@ public class Utils {
         copied.currentState = Arrays.stream(copyFrom.currentState).map(Tile[]::clone).toArray(Tile[][]::new);
 
         copied.size = copyFrom.size;
-        copied.blankPos = copyFrom.blankPos;
+        copied.blankPos = new Position(copyFrom.blankPos.row,copyFrom.blankPos.col);
         copied.heuristicVal = copyFrom.heuristicVal;
         copied.height = copyFrom.height;
 
@@ -46,36 +48,41 @@ public class Utils {
             try {
                 throw new Exception("Invalid Value Provided for n " + n);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 return false;
             }
         }
         return true;
     }
 
-    public static Pair<Tile[][], Position> constructBoardFromSequence(String[] puzzledListOfValues) {
-        var size = (int) Math.sqrt(puzzledListOfValues.length + 1);
-
+    public static Pair<Tile[][], Position> constructBoardFromSequence(String[] puzzled, String[] goal) {
+        var size = (int) Math.sqrt(puzzled.length + 1);
         var initialState = new Tile[size][size];
         var blankPos = new Position();
 
-        if (!isBoardDimensionsValid(puzzledListOfValues.length - 1, initialState)) return null;
+        if (!isBoardDimensionsValid(puzzled.length - 1, initialState)) return null;
+
+
+        var goalPositions = Arrays.asList(goal);
 
         int row = 0;
-        for (int k = 0; k < puzzledListOfValues.length; k++) {
-            var goal = 0;
-            if (puzzledListOfValues[k].equals(Consts.BLANK.value)) {
-                goal = puzzledListOfValues.length;
+        for (int k = 0; k < puzzled.length; k++) {
+            var value = puzzled[k];
+            var goalPosition = goalPositions.indexOf(puzzled[k]) + 1; // since, we are using 1 indexed positions here
+
+            if(goalPosition == -1)return null;
+
+            if (puzzled[k].equals(Consts.BLANK.value)) {
                 blankPos.row = row;
                 blankPos.col = k - row * size;
+            }
 
-            } else goal = Integer.parseInt(puzzledListOfValues[k]);
-
-            initialState[row][k - row * size] = new Tile(goal);
+            initialState[row][k - row * size] = new Tile(goalPosition,value);
 
             if ((k + 1) % size == 0) row++;
         }
 
+        // TODO: check if problem solvable
         return new Pair<>(initialState, blankPos);
     }
 

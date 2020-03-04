@@ -1,14 +1,14 @@
-package sliding_puzzle;
+package sliding_puzzle.data;
 
 public enum Consts {
 
-    BLANK("0");
+    InputSeparator(","), BLANK("*"), GivenStateAndGoalStateInputSeparator("-->");
 
     public String value;
 
     Consts(String value) {
-            this.value = value;
-        }
+        this.value = value;
+    }
 
     public enum Heuristics {
         MANHATTAN, SIMPLE

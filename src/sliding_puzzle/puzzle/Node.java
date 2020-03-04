@@ -1,10 +1,14 @@
-package sliding_puzzle;
+package sliding_puzzle.puzzle;
 
+
+import sliding_puzzle.data.Consts;
+import sliding_puzzle.data.Position;
+import sliding_puzzle.data.SharedConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static sliding_puzzle.Utils.*;
+import static sliding_puzzle.puzzle.Utils.*;
 
 /**
  * Our Node class for the internal graph
@@ -20,20 +24,32 @@ public class Node implements Comparable<Node> {
     public int size;
 
     public Node leftChild,rightChild,upChild,downChild; //explanation of the weird names. downChild-> board after a applyMove(Moves.Down) and so on.
+    public List<Consts.Moves> movesMadeSoFar;
+
     private Node parent;
+
+
 
     public Node(){ }
 
-    public Node(String[] puzzledListOfValues) {
+    public Node(String[] puzzledListOfValues, String[] goalListOfValues) {
         size = (int) Math.sqrt(puzzledListOfValues.length + 1);
-        var b = constructBoardFromSequence(puzzledListOfValues);
+        var b = constructBoardFromSequence(puzzledListOfValues, goalListOfValues);
         if (b != null) {
             currentState = b.getFirst();
             blankPos = b.getSecond();
+        } else {
+            try {
+                throw new Exception("Cannot Create board from given invalid input.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
+
+        movesMadeSoFar = new ArrayList<>();
 
     }
 
@@ -75,6 +91,8 @@ public class Node implements Comparable<Node> {
         blankPos.row = swapRow;
         blankPos.col = swapCol;
 
+        movesMadeSoFar.add(move);
+
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
 
@@ -88,15 +106,12 @@ public class Node implements Comparable<Node> {
         for (Tile[] tiles : currentState) {
             for (int j = 0; j < currentState.length; j++) {
 
-                for (int i = 0; i < (size - tiles[j].toString().length()); i++) {
-                    sb.append(".");
-                }
+                sb.append(".".repeat(Math.max(0, (size - tiles[j].toString().length()))));
 
                 //TODO: find better way to check for `blank` once goal state is being used
                 if (tiles[j].goalPosition == size * size & size > 3) sb.append(".");
 
-                if (tiles[j].goalPosition != size * size) sb.append(tiles[j]);
-                else sb.append(Consts.BLANK.value);
+                sb.append(tiles[j]);
                 //if (j + 1 != currentState.length) sb.append(".");
 
                 //sb.append(".");

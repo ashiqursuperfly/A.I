@@ -1,5 +1,7 @@
 package sliding_puzzle;
 
+import sliding_puzzle.data.Consts;
+import sliding_puzzle.puzzle.Node;
 
 import java.util.PriorityQueue;
 
@@ -8,32 +10,20 @@ public class SlidingTileProblemSolver {
 
     public Node solutionNode;
 
-    public SlidingTileProblemSolver(String[] puzzledListOfValues) {
-
-        solutionNode = new Node(puzzledListOfValues);
+    public SlidingTileProblemSolver(String[] puzzledListOfValues, String[] goalListOfValues) {
+        solutionNode = new Node(puzzledListOfValues, goalListOfValues);
     }
 
     public void solve() {
         var pq = new PriorityQueue<Node>();
         pq.add(solutionNode);
 
-//        while (!pq.isEmpty()){
-//            var popped = pq.poll();
-//            var left = new Node(popped);
-//
-//
-//
-//            for(var c : popped.children){
-//
-//            }
-//
-//
-//        }
+
 
     }
 
-    public void applyMove(Consts.Moves move){
-        solutionNode.applyMove(move);
+    public boolean applyMove(Consts.Moves move){
+        return solutionNode.applyMove(move);
     }
 
     private String[] generateGoalStateList(int n){

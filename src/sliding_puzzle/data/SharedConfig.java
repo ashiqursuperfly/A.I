@@ -1,4 +1,4 @@
-package sliding_puzzle;
+package sliding_puzzle.data;
 
 public class SharedConfig {
     public static String FILE_NAME = "in.txt";

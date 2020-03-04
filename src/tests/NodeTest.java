@@ -2,10 +2,10 @@ package tests;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sliding_puzzle.Node;
-import sliding_puzzle.Consts;
+import sliding_puzzle.puzzle.Node;
+import sliding_puzzle.data.Consts;
 import sliding_puzzle.SlidingTileProblemSolver;
-import sliding_puzzle.Utils;
+import sliding_puzzle.puzzle.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,36 +17,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
 
-    private static final String FILE_NAME = "test_input";
+    private static final String FILE_NAME = "in.txt";
     private static SlidingTileProblemSolver[] problems;
 
     @BeforeAll
     static void init() {
         File fullPath = new File(new File("").getAbsolutePath(), FILE_NAME);
+        try(BufferedReader br = new BufferedReader(new FileReader(fullPath))){
 
-        try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
-            String line;
+            String line,givenStates,goalStates;
             int nOfTestCases = Integer.parseInt(br.readLine());
             problems = new SlidingTileProblemSolver[nOfTestCases];
 
             for (int i = 0; i < nOfTestCases; i++) {
                 line = br.readLine();
-                problems[i] = new SlidingTileProblemSolver(line.split(","));
-                System.out.println(problems[i]);
+                var t = line.split(Consts.GivenStateAndGoalStateInputSeparator.value);
+                givenStates = t[0];
+                goalStates = t[1];
+
+                problems[i] = new SlidingTileProblemSolver(
+                        givenStates.split(Consts.InputSeparator.value),
+                        goalStates.split(Consts.InputSeparator.value)
+                );
             }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            fail("Error: Reading test input file:" + FILE_NAME);
         }
-
-
     }
 
     @Test
     void findBasicHeuristics() {
-        int[] expected = new int[]{2, 4, 15};
-
+        int[] expected = new int[]{2, 4, 15, 3};
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
             var v = Utils.findBasicHeuristicsValue(s.solutionNode);
@@ -56,7 +58,7 @@ class NodeTest {
 
     @Test
     void findManhattanHeuristics() {
-        int[] expected = new int[]{2, 4, 30};
+        int[] expected = new int[]{2, 4, 30, 8};
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
@@ -68,9 +70,10 @@ class NodeTest {
     @Test
     void boardComparatorTest() {
         var pq = new PriorityQueue<Node>();
-        var s = new String[]{"2", "1", "3", "0"};
+        var s = new String[]{"A", "D", "C", "B"};
+        var goal = new String[]{"A","B","C","D"};
         for (int i = 0; i < 10; i++) {
-            var temp = new Node(s);
+            var temp = new Node(s,goal);
             temp.heuristicVal = temp.height = i;
             pq.add(temp);
         }
@@ -85,7 +88,7 @@ class NodeTest {
     void boardApplyMovesTest() {
         List<Consts.Moves> moves = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            switch ((int) (Math.random() % 4)) {
+            switch ((int) (Math.random()*Integer.MAX_VALUE % 4)) {
                 case 0:
                     moves.add(Consts.Moves.UP);
                     break;
@@ -108,6 +111,7 @@ class NodeTest {
                 System.out.println("Applying move:" + move.value);
                 problem.applyMove(move);
                 System.out.println(problem);
+                System.out.println();
             }
             System.out.println();
         }
