@@ -1,7 +1,10 @@
 package sliding_puzzle;
 
 
-import static sliding_puzzle.Utils.constructBoardFromSequence;
+import java.util.ArrayList;
+import java.util.List;
+
+import static sliding_puzzle.Utils.*;
 
 /**
  * Our Node class for the internal graph
@@ -9,22 +12,44 @@ import static sliding_puzzle.Utils.constructBoardFromSequence;
  * root(n+1) x root(n+1) board
  **/
 
-public class Board implements Comparable<Board> {
+public class Node implements Comparable<Node> {
 
     public Position blankPos;
     public Tile[][] currentState;
     public int heuristicVal, height;
     private int size;
 
-    public Board(String[] puzzledListOfValues) {
+    public List<Node> children;
+    public Node parent;
+
+    public Node(String[] puzzledListOfValues) {
         size = (int) Math.sqrt(puzzledListOfValues.length + 1);
         var b = constructBoardFromSequence(puzzledListOfValues);
-
         if (b != null) {
             currentState = b.getFirst();
             blankPos = b.getSecond();
         }
+
+        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
+                findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
+
+        children = new ArrayList<>();
     }
+
+    public Node(Node b) {
+
+        this.currentState = new Tile[b.size][b.size];
+        System.arraycopy(b.currentState, 0, this.currentState, b.currentState.length-1, b.currentState.length-1);
+        this.children = b.children;
+        this.parent = b;
+
+        this.size = b.size;
+        this.blankPos = b.blankPos;
+        this.height = b.height + 1;
+
+        this.heuristicVal = b.heuristicVal;
+    }
+
 
     public boolean applyMove(Consts.Moves move) {
 
@@ -55,9 +80,6 @@ public class Board implements Comparable<Board> {
                 break;
         }
 
-        //TODO:
-        //1. swap
-        //2. update blank pointer
         var blank = currentState[row][col];
         var tile = currentState[swapRow][swapCol];
 
@@ -68,8 +90,6 @@ public class Board implements Comparable<Board> {
         blankPos.col = swapCol;
 
         return true;
-
-
     }
 
     @Override
@@ -79,13 +99,18 @@ public class Board implements Comparable<Board> {
         for (Tile[] tiles : currentState) {
             for (int j = 0; j < currentState.length; j++) {
 
-                for (int i = 0; i < tiles[j].toString().length() ; i++) {
+                for (int i = 0; i < (size - tiles[j].toString().length()); i++) {
                     sb.append(".");
                 }
 
+                //TODO: find better way to check for `blank` once goal state is being used
+                if (tiles[j].goalPosition == size * size & size > 3) sb.append(".");
+
                 if (tiles[j].goalPosition != size * size) sb.append(tiles[j]);
                 else sb.append(Consts.BLANK.value);
-                if (j + 1 != currentState.length) sb.append(".");
+                //if (j + 1 != currentState.length) sb.append(".");
+
+                //sb.append(".");
             }
             sb.append('\n');
         }
@@ -95,7 +120,7 @@ public class Board implements Comparable<Board> {
     }
 
     @Override
-    public int compareTo(Board o) {
+    public int compareTo(Node o) {
         return Integer.compare(heuristicVal + height, o.heuristicVal + o.height);
     }
 }

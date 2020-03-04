@@ -45,7 +45,7 @@ public class Utils {
         return new Pair<>(initialState, blankPos);
     }
 
-    public static int findBasicHeuristicsValue(Board currentNode) {
+    public static int findBasicHeuristicsValue(Node currentNode) {
 
         int size = currentNode.currentState[0].length, heuristicsVal = 0;
 
@@ -58,7 +58,7 @@ public class Utils {
         return heuristicsVal;
     }
 
-    public static int findManhattanHeuristicsValue(Board currentNode) {
+    public static int findManhattanHeuristicsValue(Node currentNode) {
         int size = currentNode.currentState[0].length, heuristicsVal = 0;
 
         for (int i = 0; i < size; i++) {
@@ -77,3 +77,4 @@ public class Utils {
 
 
 }
+

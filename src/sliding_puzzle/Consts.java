@@ -1,6 +1,6 @@
 package sliding_puzzle;
 
-public enum  Consts {
+public enum Consts {
 
     BLANK("0");
 

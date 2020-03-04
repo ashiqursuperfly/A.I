@@ -7,18 +7,17 @@ import java.io.IOException;
 
 public class Main {
 
-    private static String FILE_NAME = "in.txt";
 
     public static void main(String[] args) {
 	// write your code here
-        File fullPath = new File(new File("").getAbsolutePath(),FILE_NAME);
+        File fullPath = new File(new File("").getAbsolutePath(),SharedConfig.FILE_NAME);
         try(BufferedReader br = new BufferedReader(new FileReader(fullPath))){
             String line;
             int nOfTestCases = Integer.parseInt(br.readLine());
 
             for (int i = 0; i < nOfTestCases; i++) {
                 line = br.readLine();
-                new SlidingTileProblemSolver(line.split(","), Consts.Heuristics.MANHATTAN);
+                new SlidingTileProblemSolver(line.split(","));
             }
 
 

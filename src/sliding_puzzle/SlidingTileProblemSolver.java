@@ -1,26 +1,39 @@
 package sliding_puzzle;
 
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.PriorityQueue;
+
+//TODO: check if problem is solvable
 public class SlidingTileProblemSolver {
 
-    private final Consts.Heuristics heuristic;
-    public List<Board> solutionSteps;
+    public Node solution;
 
-    public SlidingTileProblemSolver(String[] puzzledListOfValues, Consts.Heuristics manhattan) {
-        this.heuristic = manhattan;
+    public SlidingTileProblemSolver(String[] puzzledListOfValues) {
 
-        solutionSteps = new ArrayList<>();
-        solutionSteps.add(new Board(puzzledListOfValues));
+        solution = new Node(puzzledListOfValues);
     }
 
     public void solve() {
+        var pq = new PriorityQueue<Node>();
+        pq.add(solution);
+
+        while (!pq.isEmpty()){
+            var popped = pq.poll();
+            var left = new Node(popped);
+
+
+
+            for(var c : popped.children){
+
+            }
+
+
+        }
 
     }
 
     public void applyMove(Consts.Moves move){
-        solutionSteps.get(solutionSteps.size()-1).applyMove(move);
+        solution.applyMove(move);
     }
 
     private String[] generateGoalStateList(int n){
@@ -36,6 +49,6 @@ public class SlidingTileProblemSolver {
 
     @Override
     public String toString() {
-        return solutionSteps.get(solutionSteps.size()-1).toString();
+        return solution.toString();
     }
 }

@@ -2,7 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sliding_puzzle.Board;
+import sliding_puzzle.Node;
 import sliding_puzzle.Consts;
 import sliding_puzzle.SlidingTileProblemSolver;
 import sliding_puzzle.Utils;
@@ -12,13 +12,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class BoardTest {
+class NodeTest {
 
     private static final String FILE_NAME = "test_input";
     private static SlidingTileProblemSolver[] problems;
@@ -34,7 +35,7 @@ class BoardTest {
 
             for (int i = 0; i < nOfTestCases; i++) {
                 line = br.readLine();
-                problems[i] = new SlidingTileProblemSolver(line.split(","), Consts.Heuristics.MANHATTAN);
+                problems[i] = new SlidingTileProblemSolver(line.split(","));
                 System.out.println(problems[i]);
             }
 
@@ -52,7 +53,7 @@ class BoardTest {
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findBasicHeuristicsValue(s.solutionSteps.get(0));
+            var v = Utils.findBasicHeuristicsValue(s.solution);
             assertEquals(expected[i], v);
         }
     }
@@ -63,17 +64,17 @@ class BoardTest {
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findManhattanHeuristicsValue(s.solutionSteps.get(0));
+            var v = Utils.findManhattanHeuristicsValue(s.solution);
             assertEquals(expected[i], v);
         }
     }
 
     @Test
     void boardComparatorTest() {
-        var pq = new PriorityQueue<Board>();
+        var pq = new PriorityQueue<Node>();
         var s = new String[]{"2", "1", "3", "0"};
         for (int i = 0; i < 10; i++) {
-            var temp = new Board(s);
+            var temp = new Node(s);
             temp.heuristicVal = temp.height = i;
             pq.add(temp);
         }
@@ -117,5 +118,17 @@ class BoardTest {
 
     }
 
+    @Test
+    void testCopyConstructorBoard(){
+        for (int i = 0; i < problems.length; i++) {
+            var board = new Node(problems[i].solution);
+
+            for (int j = 0; j < problems[i].solution.; j++) {
+
+            }
+
+            assertEquals( 0,Arrays.compare(board.currentState,problems[i].solution.currentState));
+        }
+    }
 
 }
