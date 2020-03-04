@@ -2,7 +2,41 @@ package sliding_puzzle;
 
 import kotlin.Pair;
 
+import java.util.Arrays;
+
 public class Utils {
+
+    public static Node clone(Node copyFrom) {
+
+        var copied = new Node();
+        copied.currentState = new Tile[copyFrom.size][copyFrom.size];
+        copied.currentState = Arrays.stream(copyFrom.currentState).map(Tile[]::clone).toArray(Tile[][]::new);
+
+        copied.size = copyFrom.size;
+        copied.blankPos = copyFrom.blankPos;
+        copied.heuristicVal = copyFrom.heuristicVal;
+        copied.height = copyFrom.height;
+
+        return copied;
+    }
+
+    public static boolean isClone(Node lhs, Node rhs) {
+        if (lhs == rhs) return true;
+        if (rhs != null && lhs != null) {
+
+            if (lhs.heuristicVal != rhs.heuristicVal || lhs.height != rhs.height || lhs.size != rhs.size || !lhs.blankPos.equals(rhs.blankPos))
+                return false;
+
+            for (int i = 0; i < lhs.size; i++) {
+                for (int j = 0; j < lhs.size; j++) {
+                    if (!rhs.currentState[i][j].equals(lhs.currentState[i][j])) return false;
+                }
+            }
+            return true;
+        } else return false;
+
+
+    }
 
     public static boolean isBoardDimensionsValid(int n, Tile[][] board) {
         var size = Math.sqrt(n + 1);
@@ -74,7 +108,6 @@ public class Utils {
         }
         return heuristicsVal;
     }
-
 
 }
 

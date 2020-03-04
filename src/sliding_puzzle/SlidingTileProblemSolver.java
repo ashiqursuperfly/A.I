@@ -6,34 +6,34 @@ import java.util.PriorityQueue;
 //TODO: check if problem is solvable
 public class SlidingTileProblemSolver {
 
-    public Node solution;
+    public Node solutionNode;
 
     public SlidingTileProblemSolver(String[] puzzledListOfValues) {
 
-        solution = new Node(puzzledListOfValues);
+        solutionNode = new Node(puzzledListOfValues);
     }
 
     public void solve() {
         var pq = new PriorityQueue<Node>();
-        pq.add(solution);
+        pq.add(solutionNode);
 
-        while (!pq.isEmpty()){
-            var popped = pq.poll();
-            var left = new Node(popped);
-
-
-
-            for(var c : popped.children){
-
-            }
-
-
-        }
+//        while (!pq.isEmpty()){
+//            var popped = pq.poll();
+//            var left = new Node(popped);
+//
+//
+//
+//            for(var c : popped.children){
+//
+//            }
+//
+//
+//        }
 
     }
 
     public void applyMove(Consts.Moves move){
-        solution.applyMove(move);
+        solutionNode.applyMove(move);
     }
 
     private String[] generateGoalStateList(int n){
@@ -49,6 +49,6 @@ public class SlidingTileProblemSolver {
 
     @Override
     public String toString() {
-        return solution.toString();
+        return solutionNode.toString();
     }
 }

@@ -11,13 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
 
@@ -53,7 +49,7 @@ class NodeTest {
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findBasicHeuristicsValue(s.solution);
+            var v = Utils.findBasicHeuristicsValue(s.solutionNode);
             assertEquals(expected[i], v);
         }
     }
@@ -64,7 +60,7 @@ class NodeTest {
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findManhattanHeuristicsValue(s.solution);
+            var v = Utils.findManhattanHeuristicsValue(s.solutionNode);
             assertEquals(expected[i], v);
         }
     }
@@ -119,15 +115,10 @@ class NodeTest {
     }
 
     @Test
-    void testCopyConstructorBoard(){
-        for (int i = 0; i < problems.length; i++) {
-            var board = new Node(problems[i].solution);
-
-            for (int j = 0; j < problems[i].solution.; j++) {
-
-            }
-
-            assertEquals( 0,Arrays.compare(board.currentState,problems[i].solution.currentState));
+    void testCloneBoard(){
+        for (SlidingTileProblemSolver problem : problems) {
+            var board = Utils.clone(problem.solutionNode);
+            assertTrue(Utils.isClone(board, problem.solutionNode));
         }
     }
 

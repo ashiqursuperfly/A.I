@@ -17,10 +17,12 @@ public class Node implements Comparable<Node> {
     public Position blankPos;
     public Tile[][] currentState;
     public int heuristicVal, height;
-    private int size;
+    public int size;
 
-    public List<Node> children;
-    public Node parent;
+    public Node leftChild,rightChild,upChild,downChild; //explanation of the weird names. downChild-> board after a applyMove(Moves.Down) and so on.
+    private Node parent;
+
+    public Node(){ }
 
     public Node(String[] puzzledListOfValues) {
         size = (int) Math.sqrt(puzzledListOfValues.length + 1);
@@ -33,23 +35,7 @@ public class Node implements Comparable<Node> {
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
 
-        children = new ArrayList<>();
     }
-
-    public Node(Node b) {
-
-        this.currentState = new Tile[b.size][b.size];
-        System.arraycopy(b.currentState, 0, this.currentState, b.currentState.length-1, b.currentState.length-1);
-        this.children = b.children;
-        this.parent = b;
-
-        this.size = b.size;
-        this.blankPos = b.blankPos;
-        this.height = b.height + 1;
-
-        this.heuristicVal = b.heuristicVal;
-    }
-
 
     public boolean applyMove(Consts.Moves move) {
 
@@ -89,6 +75,9 @@ public class Node implements Comparable<Node> {
         blankPos.row = swapRow;
         blankPos.col = swapCol;
 
+        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
+                findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
+
         return true;
     }
 
@@ -123,4 +112,14 @@ public class Node implements Comparable<Node> {
     public int compareTo(Node o) {
         return Integer.compare(heuristicVal + height, o.heuristicVal + o.height);
     }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+        this.height = parent.height + 1;
+    }
+
 }
