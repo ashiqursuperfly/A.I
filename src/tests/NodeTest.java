@@ -17,8 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NodeTest {
 
-    private static final String FILE_NAME = "in.txt";
+    private static final String FILE_NAME = "test_input";
     private static SlidingTileProblemSolver[] problems;
+    private static boolean isDebug = false;
 
     @BeforeAll
     static void init() {
@@ -39,6 +40,8 @@ class NodeTest {
                         givenStates.split(Consts.InputSeparator.value),
                         goalStates.split(Consts.InputSeparator.value)
                 );
+
+                System.out.println(problems[i]);
             }
 
         } catch (IOException e) {
@@ -106,14 +109,14 @@ class NodeTest {
 
 
         for (var problem : problems) {
-            System.out.println("Initial Board\n" + problem);
+            if(isDebug)System.out.println("Initial Board\n" + problem);
             for (var move : moves) {
-                System.out.println("Applying move:" + move.value);
+                if(isDebug)System.out.println("Applying move:" + move.value);
                 problem.applyMove(move);
-                System.out.println(problem);
-                System.out.println();
+                if(isDebug)System.out.println(problem);
+                if(isDebug)System.out.println();
             }
-            System.out.println();
+            if(isDebug)System.out.println();
         }
 
     }

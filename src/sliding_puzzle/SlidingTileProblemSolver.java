@@ -8,10 +8,11 @@ import java.util.PriorityQueue;
 //TODO: check if problem is solvable
 public class SlidingTileProblemSolver {
 
-    public Node solutionNode;
+    public Node solutionNode, goalNode;
 
     public SlidingTileProblemSolver(String[] puzzledListOfValues, String[] goalListOfValues) {
         solutionNode = new Node(puzzledListOfValues, goalListOfValues);
+        goalNode = new Node(goalListOfValues, goalListOfValues);
     }
 
     public void solve() {

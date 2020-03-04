@@ -11,6 +11,7 @@ public class Tile { // parameter T might mean anything starting from Strings to 
 
     @Override
     public String toString() {
-        return value + "(" + goalPosition + ")" ;
+
+        return value; // + "(" + goalPosition + ")" ;
     }
 }

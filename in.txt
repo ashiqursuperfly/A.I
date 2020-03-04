@@ -1,6 +1,6 @@
 4
 A,*,C,B-->A,B,C,*
-A,C,B,D,F,E,G,H,*-->A,B,C,D,E,F,G,H,*
+A,CX,B,DXD,F,E,G,H,*-->A,B,CX,DXD,E,F,G,H,*
 B,A,D,K,*,L,C,E,F,G,H,J,I,N,M,O-->A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,*
 C,B,H,D,E,F,G,A,*-->A,B,C,D,E,F,G,H,*
 

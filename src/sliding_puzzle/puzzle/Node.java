@@ -106,10 +106,7 @@ public class Node implements Comparable<Node> {
         for (Tile[] tiles : currentState) {
             for (int j = 0; j < currentState.length; j++) {
 
-                sb.append(".".repeat(Math.max(0, (size - tiles[j].toString().length()))));
-
-                //TODO: find better way to check for `blank` once goal state is being used
-                if (tiles[j].goalPosition == size * size & size > 3) sb.append(".");
+                sb.append("_".repeat(Math.max(0, (size - tiles[j].toString().length()))));
 
                 sb.append(tiles[j]);
                 //if (j + 1 != currentState.length) sb.append(".");
