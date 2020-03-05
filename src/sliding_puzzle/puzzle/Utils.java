@@ -4,6 +4,7 @@ import kotlin.Pair;
 import sliding_puzzle.data.Consts;
 import sliding_puzzle.data.Position;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Utils {
@@ -12,7 +13,15 @@ public class Utils {
 
         var copied = new Node();
         copied.currentState = new Tile[copyFrom.size][copyFrom.size];
-        copied.currentState = Arrays.stream(copyFrom.currentState).map(Tile[]::clone).toArray(Tile[][]::new);
+
+        int length = copyFrom.currentState.length;
+        Tile[][] target = new Tile[length][copyFrom.currentState[0].length];
+        for (int i = 0; i < length; i++) {
+            System.arraycopy(copyFrom.currentState[i], 0, target[i], 0, copyFrom.currentState[i].length);
+        }
+        copied.currentState = target;
+
+        //copied.currentState = Arrays.stream(copyFrom.currentState).map(Tile[]::clone).toArray(Tile[][]::new);
 
         copied.size = copyFrom.size;
         copied.blankPos = new Position(copyFrom.blankPos.row,copyFrom.blankPos.col);
@@ -29,15 +38,18 @@ public class Utils {
             if (lhs.heuristicVal != rhs.heuristicVal || lhs.height != rhs.height || lhs.size != rhs.size || !lhs.blankPos.equals(rhs.blankPos))
                 return false;
 
-            for (int i = 0; i < lhs.size; i++) {
-                for (int j = 0; j < lhs.size; j++) {
-                    if (!rhs.currentState[i][j].equals(lhs.currentState[i][j])) return false;
-                }
-            }
-            return true;
+            return isBoardPositionsClone(lhs, rhs);
         } else return false;
+    }
 
+    public static boolean isBoardPositionsClone(Node lhs, Node rhs) {
 
+        for (int i = 0; i < lhs.size; i++) {
+            for (int j = 0; j < lhs.size; j++) {
+                if (!rhs.currentState[i][j].equals(lhs.currentState[i][j])) return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isBoardDimensionsValid(int n, Tile[][] board) {
@@ -92,6 +104,7 @@ public class Utils {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+                if(currentNode.currentState[i][j].value.equals(Consts.BLANK.value))continue;
                 var valueCurrent = i * size + j + 1;
                 if (valueCurrent != currentNode.currentState[i][j].goalPosition) heuristicsVal++;
             }
@@ -105,16 +118,53 @@ public class Utils {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
 
+                if(currentNode.currentState[i][j].value.equals(Consts.BLANK.value))continue;
+
                 var goalI = (currentNode.currentState[i][j].goalPosition / size);
                 if (currentNode.currentState[i][j].goalPosition % size == 0) goalI--;
                 var goalJ = (currentNode.currentState[i][j].goalPosition - 1) % size;
 
-                // System.out.println(currentNode.currentState[i][j].goalPosition + " " + (goalI) + " " + goalJ);
-                heuristicsVal += (Math.abs(goalI - i) + Math.abs(goalJ - j));
+                //System.out.println(currentNode.currentState[i][j].value+ "-" +currentNode.currentState[i][j].goalPosition + " " + (goalI) + " " + goalJ);
+
+                var h = (Math.abs(goalI - i) + Math.abs(goalJ - j));
+                heuristicsVal += h;
+                //System.out.println(currentNode.currentState[i][j].value+ "-" +currentNode.currentState[i][j].goalPosition + " " + h + " ");
             }
         }
         return heuristicsVal;
     }
 
+    public static int countInversions(String [] puzzled, String[] goal) {
+
+        var goalPositions = Arrays.asList(goal);
+
+        var arrForInversionCount = new ArrayList<Integer>();
+
+        for (String value : puzzled) {
+            var goalPosition = goalPositions.indexOf(value);
+
+            if (goalPosition == -1) {
+                System.out.println("ERROR: Counting inversions. Couldnt find item in goal list");
+                return -1;
+            }
+            arrForInversionCount.add(goalPosition);
+        }
+
+        Integer [] x = new Integer[puzzled.length];
+        arrForInversionCount.toArray(x);
+
+        System.out.println(Arrays.toString(x));
+        return 0;
+    }
+
+    public static String hashBoardPositions(Node popped) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < popped.size; i++) {
+            for (int j = 0; j < popped.size; j++) {
+                sb.append(popped.currentState[i][j]).append("-");
+            }
+        }
+        return sb.toString();
+    }
 }
 

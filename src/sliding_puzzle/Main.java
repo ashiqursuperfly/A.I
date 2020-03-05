@@ -20,17 +20,25 @@ public class Main {
                 line = br.readLine();
                 var t = line.split(Consts.GivenStateAndGoalStateInputSeparator.value);
                 givenStates = t[0];
-                System.out.println(givenStates);
+                //System.out.println(givenStates);
                 goalStates = t[1];
-                System.out.println(goalStates);
+                //System.out.println(goalStates);
 
-                new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value));
+//                SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.SIMPLE;
+//                var initTime = System.currentTimeMillis();
+//                new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
+//                System.out.println("SIMPLE HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTime));
+
+                var initTimeManhattan = System.currentTimeMillis();
+                SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN;
+                new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
+                System.out.println("MANHATTAN HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTimeManhattan));
             }
-
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
+
 
     }
 

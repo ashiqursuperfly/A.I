@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import sliding_puzzle.data.Position;
 import sliding_puzzle.puzzle.Node;
 import sliding_puzzle.data.Consts;
 import sliding_puzzle.SlidingTileProblemSolver;
@@ -51,21 +52,23 @@ class NodeTest {
 
     @Test
     void findBasicHeuristics() {
-        int[] expected = new int[]{2, 4, 15, 3};
+        int[] expected = new int[]{3, 14, 4, 14, 3};
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findBasicHeuristicsValue(s.solutionNode);
+            var v = Utils.findBasicHeuristicsValue(s.solutionTree);
+            //System.out.println(v+"-->");
+
             assertEquals(expected[i], v);
         }
     }
 
     @Test
     void findManhattanHeuristics() {
-        int[] expected = new int[]{2, 4, 30, 8};
+        int[] expected = new int[]{8, 26, 4, 25, 8};
 
         for (int i = 0; i < problems.length; i++) {
             SlidingTileProblemSolver s = problems[i];
-            var v = Utils.findManhattanHeuristicsValue(s.solutionNode);
+            var v = Utils.findManhattanHeuristicsValue(s.solutionTree);
             assertEquals(expected[i], v);
         }
     }
@@ -73,8 +76,8 @@ class NodeTest {
     @Test
     void boardComparatorTest() {
         var pq = new PriorityQueue<Node>();
-        var s = new String[]{"A", "D", "C", "B"};
-        var goal = new String[]{"A","B","C","D"};
+        var s = new String[]{"A", "D", "C", "B","X","Z","Y","N","K"};
+        var goal = new String[]{"A","B","C","D","X","Y","Z","K","N"};
         for (int i = 0; i < 10; i++) {
             var temp = new Node(s,goal);
             temp.heuristicVal = temp.height = i;
@@ -90,7 +93,7 @@ class NodeTest {
     @Test
     void boardApplyMovesTest() {
         List<Consts.Moves> moves = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000000; i++) {
             switch ((int) (Math.random()*Integer.MAX_VALUE % 4)) {
                 case 0:
                     moves.add(Consts.Moves.UP);
@@ -112,7 +115,15 @@ class NodeTest {
             if(isDebug)System.out.println("Initial Board\n" + problem);
             for (var move : moves) {
                 if(isDebug)System.out.println("Applying move:" + move.value);
-                problem.applyMove(move);
+
+                var prevBlank = new Position(problem.solutionTree.blankPos.row,problem.solutionTree.blankPos.col);
+                problem.solutionTree.applyMove(move);
+                var newBlank = new Position(problem.solutionTree.blankPos.row,problem.solutionTree.blankPos.col);
+
+                var diff = Math.abs(prevBlank.row-newBlank.row) + Math.abs(prevBlank.col-newBlank.col);
+                if(diff > 1)fail("Prev:"+prevBlank+" New:"+newBlank);
+
+
                 if(isDebug)System.out.println(problem);
                 if(isDebug)System.out.println();
             }
@@ -124,9 +135,18 @@ class NodeTest {
     @Test
     void testCloneBoard(){
         for (SlidingTileProblemSolver problem : problems) {
-            var board = Utils.clone(problem.solutionNode);
-            assertTrue(Utils.isClone(board, problem.solutionNode));
+            var board = Utils.clone(problem.solutionTree);
+
+            assertTrue(Utils.isBoardPositionsClone(board, problem.solutionTree));
         }
+    }
+
+    @Test
+    void countInversions(){
+        var s = new String[]{"2","*","3","4","1","6","7","8","5","9","10","11","13","14","15","12"};
+        var g = new String[]{"1","2","3","4","5","6","*","7","8","9","10","11","12","13","14","15"};
+
+        Utils.countInversions(s,g);
     }
 
 }

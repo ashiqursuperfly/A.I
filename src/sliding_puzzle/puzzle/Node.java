@@ -24,11 +24,8 @@ public class Node implements Comparable<Node> {
     public int size;
 
     public Node leftChild,rightChild,upChild,downChild; //explanation of the weird names. downChild-> board after a applyMove(Moves.Down) and so on.
-    public List<Consts.Moves> movesMadeSoFar;
-
     private Node parent;
-
-
+    public Consts.Moves latestMove = null;
 
     public Node(){ }
 
@@ -48,8 +45,6 @@ public class Node implements Comparable<Node> {
 
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
-
-        movesMadeSoFar = new ArrayList<>();
 
     }
 
@@ -91,7 +86,7 @@ public class Node implements Comparable<Node> {
         blankPos.row = swapRow;
         blankPos.col = swapCol;
 
-        movesMadeSoFar.add(move);
+        latestMove = move;
 
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
@@ -102,7 +97,7 @@ public class Node implements Comparable<Node> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-
+        sb.append("H:").append(heuristicVal).append("\n").append("G:").append(height).append('\n');
         for (Tile[] tiles : currentState) {
             for (int j = 0; j < currentState.length; j++) {
 
@@ -129,9 +124,26 @@ public class Node implements Comparable<Node> {
         return parent;
     }
 
-    public void setParent(Node parent) {
+    public void setParent(Node parent, Consts.Moves childPos) {
         this.parent = parent;
         this.height = parent.height + 1;
+
+        switch (childPos){
+            case UP:
+                parent.upChild = this;
+                break;
+            case DOWN:
+                parent.downChild = this;
+                break;
+            case LEFT:
+                parent.leftChild = this;
+                break;
+            case RIGHT:
+                parent.rightChild = this;
+                break;
+        }
     }
+
+
 
 }
