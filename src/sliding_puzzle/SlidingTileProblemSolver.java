@@ -97,9 +97,11 @@ public class SlidingTileProblemSolver {
                 s = s.getParent();
         }
 
+
         for (int i = solutionPath.size() - 1; i >= 0; i--) {
             System.out.println("--->"+solutionPath.get(i).latestMove + "\n" + solutionPath.get(i));
         }
+
         for (int i = solutionPath.size() - 2; i >= 0; i--) {
             System.out.print(solutionPath.get(i).latestMove+"->");
         }

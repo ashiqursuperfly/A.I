@@ -2,7 +2,7 @@ package sliding_puzzle.data;
 
 public enum Consts {
 
-    InputSeparator(","), BLANK("*"), GivenStateAndGoalStateInputSeparator("-->");
+    InputSeparator(","), BLANK("#"), GivenStateAndGoalStateInputSeparator("-->");
 
     public String value;
 
