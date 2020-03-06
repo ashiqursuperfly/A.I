@@ -24,7 +24,7 @@ public class Utils {
         //copied.currentState = Arrays.stream(copyFrom.currentState).map(Tile[]::clone).toArray(Tile[][]::new);
 
         copied.size = copyFrom.size;
-        copied.blankPos = new Position(copyFrom.blankPos.row,copyFrom.blankPos.col);
+        copied.blankPos = new Position(copyFrom.blankPos.row, copyFrom.blankPos.col);
         copied.heuristicVal = copyFrom.heuristicVal;
         copied.height = copyFrom.height;
 
@@ -67,7 +67,7 @@ public class Utils {
         return true;
     }
 
-    public static Pair<Tile[][], Position> constructBoardFromSequence(String[] puzzled, String[] goal) {
+    public static Pair<Tile[][], Position> constructBoardFromSequence(String[] puzzled, String[] goal, boolean shouldCheckSolvable) {
         var size = (int) Math.sqrt(puzzled.length + 1);
         var initialState = new Tile[size][size];
         var blankPos = new Position();
@@ -82,29 +82,34 @@ public class Utils {
             var value = puzzled[k];
             var goalPosition = goalPositions.indexOf(puzzled[k]) + 1; // since, we are using 1 indexed positions here
 
-            if(goalPosition == -1)return null;
+            if (goalPosition == -1) return null;
 
             if (puzzled[k].equals(Consts.BLANK.value)) {
                 blankPos.row = row;
                 blankPos.col = k - row * size;
             }
 
-            initialState[row][k - row * size] = new Tile(goalPosition,value);
+            initialState[row][k - row * size] = new Tile(goalPosition, value);
 
             if ((k + 1) % size == 0) row++;
         }
 
-        // TODO: check if problem solvable
-        return new Pair<>(initialState, blankPos);
-    }
+        var isSolvable = PuzzleValidator.isSolvable(puzzled, goal, blankPos.row);
 
+        if (isSolvable || !shouldCheckSolvable) return new Pair<>(initialState, blankPos);
+        else {
+            System.out.println("PUZZLE UNSOLVABLE");
+            return null;
+
+        }
+    }
     public static int findBasicHeuristicsValue(Node currentNode) {
 
         int size = currentNode.currentState[0].length, heuristicsVal = 0;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(currentNode.currentState[i][j].value.equals(Consts.BLANK.value))continue;
+                if (currentNode.currentState[i][j].value.equals(Consts.BLANK.value)) continue;
                 var valueCurrent = i * size + j + 1;
                 if (valueCurrent != currentNode.currentState[i][j].goalPosition) heuristicsVal++;
             }
@@ -118,7 +123,7 @@ public class Utils {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
 
-                if(currentNode.currentState[i][j].value.equals(Consts.BLANK.value))continue;
+                if (currentNode.currentState[i][j].value.equals(Consts.BLANK.value)) continue;
 
                 var goalI = (currentNode.currentState[i][j].goalPosition / size);
                 if (currentNode.currentState[i][j].goalPosition % size == 0) goalI--;
@@ -134,30 +139,7 @@ public class Utils {
         return heuristicsVal;
     }
 
-    public static int countInversions(String [] puzzled, String[] goal) {
-
-        var goalPositions = Arrays.asList(goal);
-
-        var arrForInversionCount = new ArrayList<Integer>();
-
-        for (String value : puzzled) {
-            var goalPosition = goalPositions.indexOf(value);
-
-            if (goalPosition == -1) {
-                System.out.println("ERROR: Counting inversions. Couldnt find item in goal list");
-                return -1;
-            }
-            arrForInversionCount.add(goalPosition);
-        }
-
-        Integer [] x = new Integer[puzzled.length];
-        arrForInversionCount.toArray(x);
-
-        System.out.println(Arrays.toString(x));
-        return 0;
-    }
-
-    public static String hashBoardPositions(Node popped) {
+    public static String toStringBoardPositions(Node popped) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < popped.size; i++) {
             for (int j = 0; j < popped.size; j++) {

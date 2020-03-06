@@ -29,9 +29,12 @@ public class Node implements Comparable<Node> {
 
     public Node(){ }
 
-    public Node(String[] puzzledListOfValues, String[] goalListOfValues) {
+    public Node(String[] puzzledListOfValues, String[] goalListOfValues, boolean shouldCheckForSolvable) {
         size = (int) Math.sqrt(puzzledListOfValues.length + 1);
-        var b = constructBoardFromSequence(puzzledListOfValues, goalListOfValues);
+        var b = constructBoardFromSequence(puzzledListOfValues, goalListOfValues, shouldCheckForSolvable);
+
+
+
         if (b != null) {
             currentState = b.getFirst();
             blankPos = b.getSecond();
@@ -100,13 +103,8 @@ public class Node implements Comparable<Node> {
         sb.append("H:").append(heuristicVal).append("\n").append("G:").append(height).append('\n');
         for (Tile[] tiles : currentState) {
             for (int j = 0; j < currentState.length; j++) {
-
                 sb.append("_".repeat(Math.max(0, (size - tiles[j].toString().length()))));
-
                 sb.append(tiles[j]);
-                //if (j + 1 != currentState.length) sb.append(".");
-
-                //sb.append(".");
             }
             sb.append('\n');
         }

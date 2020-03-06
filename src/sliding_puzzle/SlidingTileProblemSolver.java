@@ -6,7 +6,6 @@ import sliding_puzzle.puzzle.Utils;
 
 import java.util.*;
 
-//TODO: check if problem is solvable
 public class SlidingTileProblemSolver {
 
     public Node solutionTree, goalNode;
@@ -20,8 +19,8 @@ public class SlidingTileProblemSolver {
         solutionStatesHashed = new HashSet<>();
         expandedStatesHashed = new HashSet<>();
         priorityQueue = new PriorityQueue<>();
-        solutionTree = new Node(puzzledListOfValues, goalListOfValues);
-        goalNode = new Node(goalListOfValues, goalListOfValues);
+        solutionTree = new Node(puzzledListOfValues, goalListOfValues, true);
+        goalNode = new Node(goalListOfValues, goalListOfValues, false);
         movesMadeSoFar = new ArrayList<>();
     }
 
@@ -37,7 +36,7 @@ public class SlidingTileProblemSolver {
                 System.out.println("!! Solution Reached !!\n"
                         + '\n'
                         +"No Of Steps:"+ movesMadeSoFar.size()
-                        +" Nodes Expanded:"+ nodesExpanded);
+                        +" Nodes Expanded:"+ nodesExpanded + "\n" + movesMadeSoFar);
                 return;
             }
 
@@ -46,30 +45,30 @@ public class SlidingTileProblemSolver {
             Node u = Utils.clone(popped);
             Node d = Utils.clone(popped);
 
-            if (l.applyMove(Consts.Moves.LEFT) && !solutionStatesHashed.contains(Utils.hashBoardPositions(l))) {
+            if (l.applyMove(Consts.Moves.LEFT) && !solutionStatesHashed.contains(Utils.toStringBoardPositions(l))) {
                 l.setParent(popped, Consts.Moves.LEFT);
-                if(!expandedStatesHashed.contains(Utils.hashBoardPositions(l))){
+                if(!expandedStatesHashed.contains(Utils.toStringBoardPositions(l))){
                     expand(l);
                 }
             }
 
-            if (r.applyMove(Consts.Moves.RIGHT) && !solutionStatesHashed.contains(Utils.hashBoardPositions(r))) {
+            if (r.applyMove(Consts.Moves.RIGHT) && !solutionStatesHashed.contains(Utils.toStringBoardPositions(r))) {
                 r.setParent(popped, Consts.Moves.RIGHT);
-                if(!expandedStatesHashed.contains(Utils.hashBoardPositions(r))){
+                if(!expandedStatesHashed.contains(Utils.toStringBoardPositions(r))){
                     expand(r);
                 }
             }
 
-            if (u.applyMove(Consts.Moves.UP) && !solutionStatesHashed.contains(Utils.hashBoardPositions(u))) {
+            if (u.applyMove(Consts.Moves.UP) && !solutionStatesHashed.contains(Utils.toStringBoardPositions(u))) {
                 u.setParent(popped, Consts.Moves.UP);
-                if(!expandedStatesHashed.contains(Utils.hashBoardPositions(u))){
+                if(!expandedStatesHashed.contains(Utils.toStringBoardPositions(u))){
                     expand(u);
                 }
             }
 
-            if (d.applyMove(Consts.Moves.DOWN) && !solutionStatesHashed.contains(Utils.hashBoardPositions(d))) {
+            if (d.applyMove(Consts.Moves.DOWN) && !solutionStatesHashed.contains(Utils.toStringBoardPositions(d))) {
                 d.setParent(popped, Consts.Moves.DOWN);
-                if(!expandedStatesHashed.contains(Utils.hashBoardPositions(d))){
+                if(!expandedStatesHashed.contains(Utils.toStringBoardPositions(d))){
                     expand(d);
                 }
             }
@@ -82,7 +81,7 @@ public class SlidingTileProblemSolver {
 
     private void expand(Node n) {
         priorityQueue.add(n);
-        expandedStatesHashed.add(Utils.hashBoardPositions(n));
+        expandedStatesHashed.add(Utils.toStringBoardPositions(n));
         nodesExpanded++;
     }
 
@@ -90,16 +89,16 @@ public class SlidingTileProblemSolver {
         if(popped.latestMove != null){ // otherwise initial node
             movesMadeSoFar.add(popped.latestMove);
         }
-        solutionStatesHashed.add(Utils.hashBoardPositions(popped));
+        solutionStatesHashed.add(Utils.toStringBoardPositions(popped));
 
-
-        try {
-            System.out.println(popped.latestMove+":");
-            System.out.println(popped);
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            System.out.println(popped.latestMove+":");
+//            System.out.println(popped);
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

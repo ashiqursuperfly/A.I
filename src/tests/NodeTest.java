@@ -79,7 +79,7 @@ class NodeTest {
         var s = new String[]{"A", "D", "C", "B","X","Z","Y","N","K"};
         var goal = new String[]{"A","B","C","D","X","Y","Z","K","N"};
         for (int i = 0; i < 10; i++) {
-            var temp = new Node(s,goal);
+            var temp = new Node(s,goal, false);
             temp.heuristicVal = temp.height = i;
             pq.add(temp);
         }
@@ -146,7 +146,7 @@ class NodeTest {
         var s = new String[]{"2","*","3","4","1","6","7","8","5","9","10","11","13","14","15","12"};
         var g = new String[]{"1","2","3","4","5","6","*","7","8","9","10","11","12","13","14","15"};
 
-        Utils.countInversions(s,g);
+        //Utils.countInversions(s,g);
     }
 
 }
