@@ -1,6 +1,7 @@
 package sliding_puzzle;
 
 import sliding_puzzle.data.Consts;
+import sliding_puzzle.data.SharedConfig;
 import sliding_puzzle.puzzle.Node;
 import sliding_puzzle.puzzle.Utils;
 
@@ -23,7 +24,8 @@ public class SlidingTileProblemSolver {
     }
 
 
-    public void solve() {
+    public void solve(boolean shouldFindAll) {
+        var initTime = System.currentTimeMillis();
         priorityQueue.add(solutionTree);
 
         while (!priorityQueue.isEmpty()) {
@@ -31,10 +33,10 @@ public class SlidingTileProblemSolver {
             recordMove(popped);
 
             if (Utils.isBoardPositionsClone(popped, goalNode)) {
-                System.out.println("!! Solution Reached !!" + " Nodes Expanded:" + nodesExpanded + "\n");
-
+                System.out.println(SharedConfig.SELECTED_HEURISTICS+" Solution Reached !!\nNodes Expanded:" + nodesExpanded);
+                System.out.println("Time(millis):-"+ (System.currentTimeMillis() - initTime));
                 simulate(popped);
-                return;
+                if(!shouldFindAll)return;
             }
 
             Node l = Utils.clone(popped);
@@ -98,15 +100,16 @@ public class SlidingTileProblemSolver {
         }
 
 
-        for (int i = solutionPath.size() - 1; i >= 0; i--) {
+      /*  for (int i = solutionPath.size() - 1; i >= 0; i--) {
             System.out.println("--->"+solutionPath.get(i).latestMove + "\n" + solutionPath.get(i));
         }
-
+      */
         for (int i = solutionPath.size() - 2; i >= 0; i--) {
             System.out.print(solutionPath.get(i).latestMove+"->");
         }
         System.out.println();
         System.out.println("Path Length:"+(solutionPath.size()-1));
+
     }
 
     @Override

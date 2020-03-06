@@ -2,7 +2,7 @@ package sliding_puzzle.data;
 
 public enum Consts {
 
-    InputSeparator(","), BLANK("#"), GivenStateAndGoalStateInputSeparator("-->");
+    InputSeparator(","), BLANK("*"), GivenStateAndGoalStateInputSeparator("-->");
 
     public String value;
 
@@ -11,7 +11,7 @@ public enum Consts {
     }
 
     public enum Heuristics {
-        MANHATTAN, SIMPLE
+        MANHATTAN_HEURISTIC, MISPLACEMENT_HEURISTIC
     }
 
     public enum Moves {
