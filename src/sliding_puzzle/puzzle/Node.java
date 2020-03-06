@@ -33,8 +33,6 @@ public class Node implements Comparable<Node> {
         size = (int) Math.sqrt(puzzledListOfValues.length + 1);
         var b = constructBoardFromSequence(puzzledListOfValues, goalListOfValues, shouldCheckForSolvable);
 
-
-
         if (b != null) {
             currentState = b.getFirst();
             blankPos = b.getSecond();
@@ -42,7 +40,7 @@ public class Node implements Comparable<Node> {
             try {
                 throw new Exception("Cannot Create board from given invalid input.");
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 

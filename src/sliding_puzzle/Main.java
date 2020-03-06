@@ -22,15 +22,19 @@ public class Main {
                 givenStates = t[0];
                 goalStates = t[1];
 
-                SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.SIMPLE;
-                var initTime = System.currentTimeMillis();
-                new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
-                System.out.println("SIMPLE HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTime));
+                try {
+                    var initTime = System.currentTimeMillis();
+                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.SIMPLE;
+                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
+                    System.out.println("SIMPLE HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTime));
 
-                var initTimeManhattan = System.currentTimeMillis();
-                SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN;
-                new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
-                System.out.println("MANHATTAN HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTimeManhattan));
+                    var initTimeManhattan = System.currentTimeMillis();
+                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN;
+                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
+                    System.out.println("MANHATTAN HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTimeManhattan));
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

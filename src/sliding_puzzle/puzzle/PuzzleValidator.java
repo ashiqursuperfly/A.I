@@ -46,11 +46,11 @@ public class PuzzleValidator {
 
     private static boolean isSolvable15(int[] x, int N, int blankRow) {
 
-        System.out.println(Arrays.toString(x));
+//        System.out.println(Arrays.toString(x));
 
         int invCount = CountInversions.count(x);
 
-        System.out.println("" + N + ":"+blankRow +" " +invCount);
+//      System.out.println("" + N + ":"+blankRow +" " +invCount);
 
         if(N % 2 != 0){
             return invCount % 2 == 0 ? true : false;

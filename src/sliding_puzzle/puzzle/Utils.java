@@ -4,8 +4,9 @@ import kotlin.Pair;
 import sliding_puzzle.data.Consts;
 import sliding_puzzle.data.Position;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class Utils {
 
@@ -138,6 +139,15 @@ public class Utils {
         }
         return heuristicsVal;
     }
+
+
+//    private boolean isValidHop(Position prevBlank, Position newBlank){
+//
+//        var diff = Math.abs(prevBlank.row-newBlank.row) + Math.abs(prevBlank.col-newBlank.col);
+//        if(diff > 1)return false;
+//
+//        return true;
+//    }
 
     public static String toStringBoardPositions(Node popped) {
         StringBuilder sb = new StringBuilder();
