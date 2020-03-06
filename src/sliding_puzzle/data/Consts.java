@@ -2,7 +2,7 @@ package sliding_puzzle.data;
 
 public enum Consts {
 
-    InputSeparator(","), BLANK("*"), GivenStateAndGoalStateInputSeparator("-->");
+    InputSeparator(","), BLANK("0");
 
     public String value;
 
@@ -15,12 +15,14 @@ public enum Consts {
     }
 
     public enum Moves {
-        UP("U"), DOWN("D"), LEFT("L"), RIGHT("R");
+        UP("U",4), DOWN("D",3), LEFT("L",2), RIGHT("R",1);
 
         public String value;
+        public int weight;
 
-        Moves(String value) {
+        Moves(String value,int weight) {
             this.value = value;
+            this.weight = weight;
         }
     }
 

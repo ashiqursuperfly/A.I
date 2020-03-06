@@ -3,10 +3,7 @@ package sliding_puzzle.puzzle;
 
 import sliding_puzzle.data.Consts;
 import sliding_puzzle.data.Position;
-import sliding_puzzle.data.SharedConfig;
-
-import java.util.ArrayList;
-import java.util.List;
+import sliding_puzzle.SharedConfig;
 
 import static sliding_puzzle.puzzle.Utils.*;
 
@@ -44,8 +41,10 @@ public class Node implements Comparable<Node> {
             }
         }
 
-        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
+        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN_HEURISTIC) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
+
+        System.out.println("initial H:"+heuristicVal);
 
     }
 
@@ -89,7 +88,7 @@ public class Node implements Comparable<Node> {
 
         latestMove = move;
 
-        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN) ?
+        heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN_HEURISTIC) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
 
         return true;
@@ -113,7 +112,11 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node o) {
-        return Integer.compare(heuristicVal + height, o.heuristicVal + o.height);
+        var c = Integer.compare(heuristicVal + height, o.heuristicVal + o.height);
+        if(c != 0)return c;
+        else return Integer.compare(o.latestMove.weight, latestMove.weight);
+
+
     }
 
     public Node getParent() {
@@ -139,7 +142,6 @@ public class Node implements Comparable<Node> {
                 break;
         }
     }
-
 
 
 }

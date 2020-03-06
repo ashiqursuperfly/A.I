@@ -1,9 +1,7 @@
-package sliding_puzzle;
+package sliding_puzzle.puzzle;
 
+import sliding_puzzle.SharedConfig;
 import sliding_puzzle.data.Consts;
-import sliding_puzzle.data.SharedConfig;
-import sliding_puzzle.puzzle.Node;
-import sliding_puzzle.puzzle.Utils;
 
 import java.util.*;
 
@@ -13,6 +11,7 @@ public class SlidingTileProblemSolver {
     public Queue<Node> priorityQueue;
     public HashSet<String> solutionStatesHashed, expandedStatesHashed;
     private int nodesExpanded = 0;
+    private int poppedCount = 0;
 
 
     public SlidingTileProblemSolver(String[] puzzledListOfValues, String[] goalListOfValues) {
@@ -26,14 +25,16 @@ public class SlidingTileProblemSolver {
 
     public void solve(boolean shouldFindAll) {
         var initTime = System.currentTimeMillis();
+
         priorityQueue.add(solutionTree);
+        solutionStatesHashed.add(Utils.toStringBoardPositions(solutionTree));
 
         while (!priorityQueue.isEmpty()) {
-            var popped = priorityQueue.poll();
+            var popped = priorityQueue.remove();
             recordMove(popped);
 
             if (Utils.isBoardPositionsClone(popped, goalNode)) {
-                System.out.println(SharedConfig.SELECTED_HEURISTICS+" Solution Reached !!\nNodes Expanded:" + nodesExpanded);
+                System.out.println(SharedConfig.SELECTED_HEURISTICS+" Solution Reached !!\nNodes Expanded:" + nodesExpanded + " Popped Nodes:"+ poppedCount);
                 System.out.println("Time(millis):-"+ (System.currentTimeMillis() - initTime));
                 simulate(popped);
                 if(!shouldFindAll)return;
@@ -54,6 +55,7 @@ public class SlidingTileProblemSolver {
             }
             if (r.applyMove(Consts.Moves.RIGHT)
                     && !solutionStatesHashed.contains(Utils.toStringBoardPositions(r))) {
+
                 r.setParent(popped, Consts.Moves.RIGHT);
                 if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(r))) {
                     expand(r);
@@ -61,6 +63,7 @@ public class SlidingTileProblemSolver {
             }
             if (u.applyMove(Consts.Moves.UP)
                     && !solutionStatesHashed.contains(Utils.toStringBoardPositions(u))) {
+
                 u.setParent(popped, Consts.Moves.UP);
                 if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(u))) {
                     expand(u);
@@ -68,11 +71,13 @@ public class SlidingTileProblemSolver {
             }
             if (d.applyMove(Consts.Moves.DOWN)
                     && !solutionStatesHashed.contains(Utils.toStringBoardPositions(d))) {
+
                 d.setParent(popped, Consts.Moves.DOWN);
                 if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(d))) {
                     expand(d);
                 }
             }
+
 
         }
 
@@ -87,7 +92,12 @@ public class SlidingTileProblemSolver {
     }
 
     private void recordMove(Node popped) {
-        solutionStatesHashed.add(Utils.toStringBoardPositions(popped));
+        var x = Utils.toStringBoardPositions(popped);
+
+        solutionStatesHashed.add(x);
+        poppedCount++;
+
+
     }
 
     public void simulate(Node s) {

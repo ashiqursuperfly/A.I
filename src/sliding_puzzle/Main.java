@@ -1,7 +1,7 @@
 package sliding_puzzle;
 
 import sliding_puzzle.data.Consts;
-import sliding_puzzle.data.SharedConfig;
+import sliding_puzzle.puzzle.SlidingTileProblemSolver;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,29 +11,27 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-	    File fullPath = new File(new File("").getAbsolutePath(), SharedConfig.FILE_NAME);
-        try(BufferedReader br = new BufferedReader(new FileReader(fullPath))){
-            String line,givenStates,goalStates;
-            int nOfTestCases = Integer.parseInt(br.readLine());
+        File fullPath = new File(new File("").getAbsolutePath(), SharedConfig.FILE_NAME);
+        try (BufferedReader br = new BufferedReader(new FileReader(fullPath))) {
+            String givenStates, goalStates;
+            int nOfTestCases = Integer.parseInt(br.readLine()) - 1;
+            goalStates = br.readLine();
 
             for (int i = 0; i < nOfTestCases; i++) {
-                line = br.readLine();
-                var t = line.split(Consts.GivenStateAndGoalStateInputSeparator.value);
-                givenStates = t[0];
-                goalStates = t[1];
-
+                givenStates = br.readLine();
                 try {
-                    var initTime = System.currentTimeMillis();
-                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.SIMPLE;
-                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
-                    System.out.println("SIMPLE HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTime));
+                    System.out.println("CASE:" + i);
 
-                    var initTimeManhattan = System.currentTimeMillis();
-                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN;
-                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve();
-                    System.out.println("MANHATTAN HEURISTICS: Time(Millis):-"+ (System.currentTimeMillis() - initTimeManhattan));
-                }catch (Exception e){
+                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MISPLACEMENT_HEURISTIC;
+                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve(false);
+                    System.out.println();
+
+                    SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN_HEURISTIC;
+                    new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve(false);
+                    System.out.println();
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    System.out.println();
                 }
             }
         } catch (IOException e) {
@@ -41,9 +39,7 @@ public class Main {
         }
 
 
-
     }
-
 
 
 }

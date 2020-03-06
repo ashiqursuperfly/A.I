@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import sliding_puzzle.data.Position;
 import sliding_puzzle.puzzle.Node;
 import sliding_puzzle.data.Consts;
-import sliding_puzzle.SlidingTileProblemSolver;
+import sliding_puzzle.puzzle.SlidingTileProblemSolver;
 import sliding_puzzle.puzzle.Utils;
 
 import java.io.BufferedReader;
@@ -27,23 +27,23 @@ class NodeTest {
         File fullPath = new File(new File("").getAbsolutePath(), FILE_NAME);
         try(BufferedReader br = new BufferedReader(new FileReader(fullPath))){
 
-            String line,givenStates,goalStates;
-            int nOfTestCases = Integer.parseInt(br.readLine());
-            problems = new SlidingTileProblemSolver[nOfTestCases];
-
-            for (int i = 0; i < nOfTestCases; i++) {
-                line = br.readLine();
-                var t = line.split(Consts.GivenStateAndGoalStateInputSeparator.value);
-                givenStates = t[0];
-                goalStates = t[1];
-
-                problems[i] = new SlidingTileProblemSolver(
-                        givenStates.split(Consts.InputSeparator.value),
-                        goalStates.split(Consts.InputSeparator.value)
-                );
-
-                System.out.println(problems[i]);
-            }
+//            String line,givenStates,goalStates;
+//            int nOfTestCases = Integer.parseInt(br.readLine());
+//            problems = new SlidingTileProblemSolver[nOfTestCases];
+//
+//            for (int i = 0; i < nOfTestCases; i++) {
+//                line = br.readLine();
+//                var t = line.split(Consts.GivenStateAndGoalStateInputSeparator.value);
+//                givenStates = t[0];
+//                goalStates = t[1];
+//
+//                problems[i] = new SlidingTileProblemSolver(
+//                        givenStates.split(Consts.InputSeparator.value),
+//                        goalStates.split(Consts.InputSeparator.value)
+//                );
+//
+//                System.out.println(problems[i]);
+//            }
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
