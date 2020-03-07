@@ -44,7 +44,7 @@ public class Node implements Comparable<Node> {
         heuristicVal = (SharedConfig.SELECTED_HEURISTICS == Consts.Heuristics.MANHATTAN_HEURISTIC) ?
                 findManhattanHeuristicsValue(this) : findBasicHeuristicsValue(this);
 
-        System.out.println("initial H:"+heuristicVal);
+        //System.out.println("initial H:"+heuristicVal);
 
     }
 

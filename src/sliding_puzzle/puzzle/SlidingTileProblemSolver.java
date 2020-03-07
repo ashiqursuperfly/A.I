@@ -9,14 +9,14 @@ public class SlidingTileProblemSolver {
 
     public Node solutionTree, goalNode;
     public Queue<Node> priorityQueue;
-    public HashSet<String> solutionStatesHashed, expandedStatesHashed;
+    public HashMap<String,Integer> solutionStatesHashed, expandedStatesHashed;
     private int nodesExpanded = 0;
     private int poppedCount = 0;
 
 
     public SlidingTileProblemSolver(String[] puzzledListOfValues, String[] goalListOfValues) {
-        solutionStatesHashed = new HashSet<>();
-        expandedStatesHashed = new HashSet<>();
+        solutionStatesHashed = new HashMap<>();
+        expandedStatesHashed = new HashMap<>();
         priorityQueue = new PriorityQueue<>();
         solutionTree = new Node(puzzledListOfValues, goalListOfValues, true);
         goalNode = new Node(goalListOfValues, goalListOfValues, false);
@@ -27,7 +27,7 @@ public class SlidingTileProblemSolver {
         var initTime = System.currentTimeMillis();
 
         priorityQueue.add(solutionTree);
-        solutionStatesHashed.add(Utils.toStringBoardPositions(solutionTree));
+        solutionStatesHashed.put(Utils.toStringBoardPositions(solutionTree),solutionTree.height);
 
         while (!priorityQueue.isEmpty()) {
             var popped = priorityQueue.remove();
@@ -45,40 +45,60 @@ public class SlidingTileProblemSolver {
             Node u = Utils.clone(popped);
             Node d = Utils.clone(popped);
 
-            if (l.applyMove(Consts.Moves.LEFT)
-                    && !solutionStatesHashed.contains(Utils.toStringBoardPositions(l))) {
 
-                l.setParent(popped, Consts.Moves.LEFT);
-                if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(l))) {
-                    expand(l);
-                }
-            }
-            if (r.applyMove(Consts.Moves.RIGHT)
-                    && !solutionStatesHashed.contains(Utils.toStringBoardPositions(r))) {
+            if (l.applyMove(Consts.Moves.LEFT)) {
 
-                r.setParent(popped, Consts.Moves.RIGHT);
-                if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(r))) {
-                    expand(r);
-                }
-            }
-            if (u.applyMove(Consts.Moves.UP)
-                    && !solutionStatesHashed.contains(Utils.toStringBoardPositions(u))) {
+                var keyL = Utils.toStringBoardPositions(l);
 
-                u.setParent(popped, Consts.Moves.UP);
-                if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(u))) {
-                    expand(u);
-                }
-            }
-            if (d.applyMove(Consts.Moves.DOWN)
-                    && !solutionStatesHashed.contains(Utils.toStringBoardPositions(d))) {
+                if(solutionStatesHashed.get(keyL) == null) {
+                    l.setParent(popped, Consts.Moves.LEFT);
 
-                d.setParent(popped, Consts.Moves.DOWN);
-                if (!expandedStatesHashed.contains(Utils.toStringBoardPositions(d))) {
-                    expand(d);
+                    var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(l));
+                    if (searchResult == null || searchResult > popped.height) {
+                        expand(l);
+                    }
                 }
             }
 
+            if (r.applyMove(Consts.Moves.RIGHT)) {
 
+                var keyR = Utils.toStringBoardPositions(r);
+
+                if(solutionStatesHashed.get(keyR) == null){
+                    r.setParent(popped, Consts.Moves.RIGHT);
+
+                    var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(r));
+                    if (searchResult == null || searchResult > popped.height) {
+                        expand(r);
+                    }
+                }
+            }
+
+            if (u.applyMove(Consts.Moves.UP)) {
+
+                var keyU = Utils.toStringBoardPositions(u);
+
+                if(solutionStatesHashed.get(keyU) == null) {
+                    u.setParent(popped, Consts.Moves.UP);
+
+                    var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(u));
+                    if (searchResult == null || searchResult > popped.height) {
+                        expand(u);
+                    }
+                }
+            }
+            if (d.applyMove(Consts.Moves.DOWN)) {
+
+                var keyD = Utils.toStringBoardPositions(d);
+                if(solutionStatesHashed.get(keyD) == null) {
+                    d.setParent(popped, Consts.Moves.DOWN);
+
+                    var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(d));
+                    if (searchResult == null || searchResult > popped.height) {
+                        expand(d);
+                    }
+                }
+            }
         }
 
         System.out.println("PQ Empty!\n");
@@ -87,14 +107,14 @@ public class SlidingTileProblemSolver {
 
     private void expand(Node n) {
         priorityQueue.add(n);
-        expandedStatesHashed.add(Utils.toStringBoardPositions(n));
+        expandedStatesHashed.put(Utils.toStringBoardPositions(n),n.height);
         nodesExpanded++;
     }
 
     private void recordMove(Node popped) {
         var x = Utils.toStringBoardPositions(popped);
 
-        solutionStatesHashed.add(x);
+        solutionStatesHashed.put(x,popped.height);
         poppedCount++;
 
 
