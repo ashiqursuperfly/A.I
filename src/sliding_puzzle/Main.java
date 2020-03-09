@@ -21,7 +21,6 @@ public class Main {
                 givenStates = br.readLine();
                 try {
                     System.out.println("CASE:" + i);
-
                     SharedConfig.SELECTED_HEURISTICS = Consts.Heuristics.MANHATTAN_HEURISTIC;
                     new SlidingTileProblemSolver(givenStates.split(Consts.InputSeparator.value), goalStates.split(Consts.InputSeparator.value)).solve(false);
                     System.out.println();

@@ -51,11 +51,11 @@ public class SlidingTileProblemSolver {
                 var keyL = Utils.toStringBoardPositions(l);
 
                 if(solutionStatesHashed.get(keyL) == null) {
-                    l.setParent(popped, Consts.Moves.LEFT);
 
                     var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(l));
                     if (searchResult == null || searchResult > popped.height) {
                         expand(l);
+                        l.setParent(popped, Consts.Moves.LEFT);
                     }
                 }
             }
@@ -65,11 +65,11 @@ public class SlidingTileProblemSolver {
                 var keyR = Utils.toStringBoardPositions(r);
 
                 if(solutionStatesHashed.get(keyR) == null){
-                    r.setParent(popped, Consts.Moves.RIGHT);
 
                     var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(r));
                     if (searchResult == null || searchResult > popped.height) {
                         expand(r);
+                        r.setParent(popped, Consts.Moves.RIGHT);
                     }
                 }
             }
@@ -79,11 +79,12 @@ public class SlidingTileProblemSolver {
                 var keyU = Utils.toStringBoardPositions(u);
 
                 if(solutionStatesHashed.get(keyU) == null) {
-                    u.setParent(popped, Consts.Moves.UP);
+
 
                     var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(u));
                     if (searchResult == null || searchResult > popped.height) {
                         expand(u);
+                        u.setParent(popped, Consts.Moves.UP);
                     }
                 }
             }
@@ -91,11 +92,12 @@ public class SlidingTileProblemSolver {
 
                 var keyD = Utils.toStringBoardPositions(d);
                 if(solutionStatesHashed.get(keyD) == null) {
-                    d.setParent(popped, Consts.Moves.DOWN);
+
 
                     var searchResult = expandedStatesHashed.get(Utils.toStringBoardPositions(d));
                     if (searchResult == null || searchResult > popped.height) {
                         expand(d);
+                        d.setParent(popped, Consts.Moves.DOWN);
                     }
                 }
             }
