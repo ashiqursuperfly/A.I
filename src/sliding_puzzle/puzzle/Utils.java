@@ -148,15 +148,25 @@ public class Utils {
 //
 //        return true;
 //    }
+//
+//    public static String toStringBoardPositions(Node popped) {
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < popped.size; i++) {
+//            for (int j = 0; j < popped.size; j++) {
+//                sb.append(popped.currentState[i][j]).append("-");
+//            }
+//        }
+//        return sb.toString();
+//    }
 
-    public static String toStringBoardPositions(Node popped) {
+    public static Long toLongBoardPositions(Node popped) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < popped.size; i++) {
             for (int j = 0; j < popped.size; j++) {
-                sb.append(popped.currentState[i][j]).append("-");
+                sb.append(popped.currentState[i][j]);
             }
         }
-        return sb.toString();
+        return Long.parseLong(sb.toString());
     }
 }
 
