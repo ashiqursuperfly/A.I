@@ -8,12 +8,11 @@ import kotlin.collections.ArrayList
 class GraphColoringScheduler(
     var graph: CourseGraph
 ) {
-
-    private lateinit var priorityQueue: PriorityQueue<Course>
+    var colorsUsed = 0
 
     fun execute() {
-        var colorsUsed = 0
-        priorityQueue = PriorityQueue(BrelazComparator())
+        colorsUsed = 0
+        val priorityQueue = PriorityQueue(BrelazComparator().reversed())
 
         for (item in graph.courses) {
             priorityQueue.add(item.value)
@@ -22,7 +21,7 @@ class GraphColoringScheduler(
         while (priorityQueue.isNotEmpty()) {
             val nextToColor = priorityQueue.poll()
 
-            val availableColors = getAvailableColors(colorsUsed)
+            val availableColors = getAvailableColors()
 
             for (item in nextToColor.neighbours) {
                 if (item.color != UNCOLORED) availableColors.remove(item.color)
@@ -34,18 +33,19 @@ class GraphColoringScheduler(
             else {
                 availableColors[0]
             }
-            println(colorsUsed)
+
             nextToColor.color = selectedColor
 
             priorityQueue.add(nextToColor)
             priorityQueue.remove(nextToColor)
 
         }
-
     }
 
-    private fun getAvailableColors (colorsUsed: Int) : ArrayList<Int> {
-        return ArrayList(IntArray(colorsUsed) { i -> i }.asList())
+    private fun getAvailableColors () : ArrayList<Int> {
+        val colors = ArrayList(IntArray(colorsUsed) { i -> i }.asList())
+        colors.shuffle()
+        return colors
     }
 
 }
