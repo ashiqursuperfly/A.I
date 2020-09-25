@@ -1,5 +1,6 @@
 package graphcolouring
 
+import graphcolouring.heuristics.ConstructiveHeuristic
 import kotlin.test.assertEquals
 
 fun main () {
@@ -24,7 +25,7 @@ fun main () {
             }
 
             val solver = GraphColoringScheduler(courseGraph)
-            solver.execute()
+            solver.executeConstructive(ConstructiveHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION)
             println("${courseFiles[i]},${solver.colorsUsed}")
         }
         println()

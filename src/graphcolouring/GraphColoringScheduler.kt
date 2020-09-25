@@ -2,6 +2,8 @@ package graphcolouring
 
 import graphcolouring.Course.Companion.UNCOLORED
 import graphcolouring.heuristics.BrelazComparator
+import graphcolouring.heuristics.ConstructiveHeuristic
+import graphcolouring.heuristics.LargestDegreeComparator
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -10,17 +12,24 @@ class GraphColoringScheduler(
 ) {
     var colorsUsed = 0
 
-    fun execute() {
+    fun executeConstructive(heuristic: ConstructiveHeuristic) {
         colorsUsed = 0
-        val priorityQueue = PriorityQueue(BrelazComparator().reversed())
 
+        val comparator = when(heuristic) {
+            ConstructiveHeuristic.LARGEST_DEGREE_FIRST -> {
+                LargestDegreeComparator()
+            }
+            ConstructiveHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION -> {
+                BrelazComparator()
+            }
+        }
+        val priorityQueue = PriorityQueue(comparator.reversed())
         for (item in graph.courses) {
             priorityQueue.add(item.value)
         }
 
         while (priorityQueue.isNotEmpty()) {
             val nextToColor = priorityQueue.poll()
-
             val availableColors = getAvailableColors()
 
             for (item in nextToColor.neighbours) {
@@ -43,9 +52,7 @@ class GraphColoringScheduler(
     }
 
     private fun getAvailableColors () : ArrayList<Int> {
-        val colors = ArrayList(IntArray(colorsUsed) { i -> i }.asList())
-        colors.shuffle()
-        return colors
+        return ArrayList(IntArray(colorsUsed) { i -> i }.asList())
     }
 
 }

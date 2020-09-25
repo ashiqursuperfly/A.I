@@ -7,9 +7,6 @@ class BrelazComparator: Comparator<Course> {
 
     override fun compare(o1: Course, o2: Course): Int {
 
-       if (o1.color != UNCOLORED && o2.color == UNCOLORED) return -1
-       else if (o2.color != UNCOLORED && o1.color == UNCOLORED) return 1
-
        val saturation1 = o1.neighbours.count {
            it.color != UNCOLORED
        }

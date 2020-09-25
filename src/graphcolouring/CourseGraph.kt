@@ -15,19 +15,19 @@ class CourseGraph(
         val newStudentId = createNextStudentId()
         val studentCourses = line.split(' ')
 
-        studentCourses.forEach {
-            courses[it]?.apply {
-                this.studentIds.add(newStudentId)
-                studentCourses.forEach {it2->
-                    if (it != it2) {
-                        courses[it2]?.let { it3 ->
-                            this.neighbours.addUnique(it3)
-                            it3.neighbours.addUnique(this)
+            studentCourses.forEach {
+                courses[it]?.apply {
+                    this.studentIds.add(newStudentId)
+                    studentCourses.forEach {it2->
+                        if (it != it2) {
+                            courses[it2]?.let { it3 ->
+                                this.neighbours.addUnique(it3)
+                                it3.neighbours.addUnique(this)
+                            }
                         }
                     }
                 }
             }
-        }
     }
 
     private fun addCourse(line: String) {
