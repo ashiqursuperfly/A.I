@@ -1,6 +1,6 @@
 package graphcolouring.heuristics
 
-import graphcolouring.Course
+import graphcolouring.models.Course
 
 class LargestDegreeComparator : Comparator<Course> {
 

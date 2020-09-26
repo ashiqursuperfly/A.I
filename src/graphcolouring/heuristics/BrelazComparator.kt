@@ -1,7 +1,7 @@
 package graphcolouring.heuristics
 
-import graphcolouring.Course
-import graphcolouring.Course.Companion.UNCOLORED
+import graphcolouring.models.Course
+import graphcolouring.models.Course.Companion.UNCOLORED
 
 class BrelazComparator: Comparator<Course> {
 
