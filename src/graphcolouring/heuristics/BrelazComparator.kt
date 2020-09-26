@@ -3,16 +3,21 @@ package graphcolouring.heuristics
 import graphcolouring.models.Course
 import graphcolouring.models.Course.Companion.UNCOLORED
 
-class BrelazComparator: Comparator<Course> {
+class BrelazComparator : Comparator<Course> {
 
     override fun compare(o1: Course, o2: Course): Int {
 
-       val saturation1 = o1.neighbours.count {
-           it.color != UNCOLORED
-       }
-       val saturation2 = o2.neighbours.count {
-           it.color != UNCOLORED
-       }
+        val saturation1 = o1.neighbours.map {
+            it.color
+        }.distinct().filter {
+            it != UNCOLORED
+        }.size
+
+        val saturation2 = o2.neighbours.map {
+            it.color
+        }.distinct().filter {
+            it != UNCOLORED
+        }.size
 
         when {
             saturation1 > saturation2 -> {
