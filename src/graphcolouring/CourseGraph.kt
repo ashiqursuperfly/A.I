@@ -70,7 +70,6 @@ class CourseGraph(
             idx2 = (Math.random() * Int.MAX_VALUE).toInt() % courses.size
         } while (idx1 == idx2)
 
-        //println("rand: ${idx1} ${idx2}")
         val nodes = courses.map {
             it.key
         }

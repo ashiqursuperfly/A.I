@@ -26,7 +26,8 @@ fun main () {
 
         println("${courseFiles[i]}, ${solver.colorsUsed}, ${solver.penalty} ${solver.graph.courses.size}")
 
-        //solver.tryPairSwaps(Int.MAX_VALUE)
+        solver.tryPairSwaps(99999)
+
 
 
     }

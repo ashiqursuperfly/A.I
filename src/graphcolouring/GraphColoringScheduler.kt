@@ -110,7 +110,7 @@ class GraphColoringScheduler(
                 val prevPenalty = penalty
                 reCalculatePenalty()
 
-                if (prevPenalty > penalty) {
+                if (prevPenalty >= penalty) {
                     val input = Scanner(System.`in`)
                     println("Penalty Improved !! Do You Want to Keep Trying ? (y/N)")
                     if (input.nextLine().trim().equals("y", true)) break
@@ -125,6 +125,7 @@ class GraphColoringScheduler(
     private fun tryPairSwap(): Boolean {
 
         val randomPair: Pair<Course, Course> = graph.getRandomCoursePair()
+
 
         if (isPairSwapValid(randomPair.first, randomPair.second)) {
 
@@ -151,8 +152,12 @@ class GraphColoringScheduler(
         val c1 = node1.neighbours.map { it.color }.contains(node2.color)
         val c2 = node2.neighbours.map { it.color }.contains(node1.color)
 
-        //println(node1)
-        //println(node2)
+        if (c1) {
+            assertEquals(node1.neighbours.find { it.color == node2.color }?.color, node2.color)
+        }
+        if (c2) {
+            assertEquals(node2.neighbours.find { it.color == node1.color }?.color, node1.color)
+        }
 
         if (c1 || c2) return false
         return true
