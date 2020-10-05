@@ -9,8 +9,7 @@ class CourseGraph(
 ) {
     var totalStudentCount = 0
     var courses = HashMap<String, Course>() // key:courseID value:Course
-    var students = ArrayList<Student>() // key:courseID value:Course
-
+    var students = ArrayList<Student>()
 
     private fun createNextStudentId() : String {
         return (++totalStudentCount).toString()
@@ -22,12 +21,13 @@ class CourseGraph(
 
         val student = Student(id = newStudentId)
 
-            studentCourses.forEach {
-                courses[it]?.apply {
+        studentCourses.forEach {
+            if (it.isNotBlank()) {
+                courses[it]!!.apply {
                     student.courseIDs.add(this.id)
                     this.studentIds.add(newStudentId)
-                    studentCourses.forEach { it2->
-                        if (it != it2) {
+                    studentCourses.forEach { it2 ->
+                        if (this.id != it2) {
                             courses[it2]?.let { it3 ->
                                 this.neighbours.addUnique(it3)
                                 it3.neighbours.addUnique(this)
@@ -36,7 +36,8 @@ class CourseGraph(
                     }
                 }
             }
-            students.add(student)
+        }
+        students.add(student)
     }
 
     private fun addCourse(line: String) {
@@ -61,5 +62,20 @@ class CourseGraph(
         )
     }
 
+    fun getRandomCoursePair(): Pair<Course, Course> {
+        var idx1 = -1
+        var idx2 = -1
+        do {
+            idx1 = (Math.random() * Int.MAX_VALUE).toInt() % courses.size
+            idx2 = (Math.random() * Int.MAX_VALUE).toInt() % courses.size
+        } while (idx1 == idx2)
 
+        //println("rand: ${idx1} ${idx2}")
+        val nodes = courses.map {
+            it.key
+        }
+
+        return Pair(courses[nodes[idx1]]!!, courses[nodes[idx2]]!!)
+
+    }
 }

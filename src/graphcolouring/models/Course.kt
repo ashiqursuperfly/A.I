@@ -7,7 +7,15 @@ data class Course (
         val studentIds: HashSet<String> = HashSet(),
         val neighbours: ArrayList<Course> = ArrayList()
 ) {
+
+
     companion object {
-        const val UNCOLORED = -1
+        const val UNCOLORED = 0
     }
+
+    override fun toString(): String {
+        return "Course(id='$id', color=$color}})"
+    }
+
+
 }
