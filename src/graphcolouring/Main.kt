@@ -3,12 +3,13 @@ package graphcolouring
 import graphcolouring.heuristics.ConstructiveHeuristic
 import graphcolouring.solver.GraphColouringFeasibleSolutionGenerator
 import graphcolouring.solver.GraphColouringUtils
+import graphcolouring.solver.KempeChainInterchange
 import graphcolouring.solver.PairSwapOperator
 
 fun main () {
 
-    val courseFiles = arrayOf("car-s-91.crs", "car-f-92.crs", "kfu-s-93.crs", "tre-s-92.crs", "yor-f-83.crs")
-    val studentFiles = arrayOf("car-s-91.stu", "car-f-92.stu", "kfu-s-93.stu", "tre-s-92.stu", "yor-f-83.stu")
+    val courseFiles = arrayOf("yor-f-83.crs")//"car-s-91.crs", "car-f-92.crs", "kfu-s-93.crs", "tre-s-92.crs", "yor-f-83.crs")
+    val studentFiles = arrayOf("yor-f-83.stu")//"car-s-91.stu", "car-f-92.stu", "kfu-s-93.stu", "tre-s-92.stu", "yor-f-83.stu")
 
     for (i in courseFiles.indices) {
 
@@ -29,8 +30,14 @@ fun main () {
 
         println("${courseFiles[i]}, ${solver.colorsUsed}, $penalty ${solver.graph.courses.size}")
 
-        val pairSwapper = PairSwapOperator(solver.graph)
+        /*val pairSwapper = PairSwapOperator(solver.graph)
         pairSwapper.tryPairSwaps(5)
+        */
+
+        val kempe = KempeChainInterchange(solver.graph)
+
+        kempe.tryKempeChainInterChange()
+
 
 
     }

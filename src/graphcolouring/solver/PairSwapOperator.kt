@@ -71,7 +71,7 @@ class PairSwapOperator(
         return true
     }
 
-    fun swapColors(n1: Course, n2: Course) {
+    private fun swapColors(n1: Course, n2: Course) {
         n1.color = n1.color xor n2.color
         n2.color = n2.color xor n1.color
         n1.color = n1.color xor n2.color

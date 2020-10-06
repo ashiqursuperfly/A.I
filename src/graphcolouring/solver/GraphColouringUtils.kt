@@ -9,7 +9,7 @@ import kotlin.test.assertNotEquals
 object GraphColouringUtils {
 
     fun reCalculatePenalty(graph: CourseGraph): Float {
-        val cost = arrayOf (Int.MAX_VALUE, 16, 8, 4, 2, 1)
+        val cost = arrayOf(Int.MAX_VALUE, 16, 8, 4, 2, 1)
 
         var penalty = 0
         graph.students.forEach { student ->
@@ -32,8 +32,10 @@ object GraphColouringUtils {
 
                     val diff = abs(nextNextExam - nextExam)
 
-                    assertNotEquals(diff, 0)
-
+                    if (diff == 0) {
+                        println(studentSchedule)
+                        assertNotEquals(0, diff)
+                    }
                     if (diff >= cost.size) continue
                     penalty += cost[diff]
 
@@ -66,4 +68,5 @@ object GraphColouringUtils {
         assertEquals(total, graph.courses.size)
 
     }
+
 }
