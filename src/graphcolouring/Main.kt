@@ -3,6 +3,7 @@ package graphcolouring
 import graphcolouring.heuristics.ConstructiveHeuristic
 import graphcolouring.solver.GraphColouringFeasibleSolutionGenerator
 import graphcolouring.solver.GraphColouringUtils
+import graphcolouring.solver.PairSwapOperator
 
 fun main () {
 
@@ -22,15 +23,14 @@ fun main () {
 
         val solver = GraphColouringFeasibleSolutionGenerator(courseGraph)
         solver.solveConstructive(ConstructiveHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION)
+
         GraphColouringUtils.assertZeroUnColoredVertices(solver.graph)
         val penalty = GraphColouringUtils.reCalculatePenalty(solver.graph)
 
         println("${courseFiles[i]}, ${solver.colorsUsed}, $penalty ${solver.graph.courses.size}")
 
-//        solver.tryPairSwaps(99999)
-//
-//        solver.tryKempeChainInterChange()
-
+        val pairSwapper = PairSwapOperator(solver.graph)
+        pairSwapper.tryPairSwaps(5)
 
 
     }
