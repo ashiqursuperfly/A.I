@@ -77,4 +77,10 @@ class CourseGraph(
         return Pair(courses[nodes[idx1]]!!, courses[nodes[idx2]]!!)
 
     }
+
+    fun getRandomCourse(fromCourseIDs: List<String>): Course {
+        val idx1 = (Math.random() * Int.MAX_VALUE).toInt() % courses.size
+
+        return courses[fromCourseIDs[idx1]]!!
+    }
 }

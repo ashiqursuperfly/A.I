@@ -1,7 +1,8 @@
 package graphcolouring
 
 import graphcolouring.heuristics.ConstructiveHeuristic
-import kotlin.test.assertEquals
+import graphcolouring.solver.GraphColouringFeasibleSolutionGenerator
+import graphcolouring.solver.GraphColouringUtils
 
 fun main () {
 
@@ -19,14 +20,16 @@ fun main () {
         courseGraph.processStudentFile()
 
 
-        val solver = GraphColoringScheduler(courseGraph)
+        val solver = GraphColouringFeasibleSolutionGenerator(courseGraph)
         solver.solveConstructive(ConstructiveHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION)
-        solver.assertZeroColoredVertices()
-        solver.reCalculatePenalty()
+        GraphColouringUtils.assertZeroUnColoredVertices(solver.graph)
+        val penalty = GraphColouringUtils.reCalculatePenalty(solver.graph)
 
-        println("${courseFiles[i]}, ${solver.colorsUsed}, ${solver.penalty} ${solver.graph.courses.size}")
+        println("${courseFiles[i]}, ${solver.colorsUsed}, $penalty ${solver.graph.courses.size}")
 
-        solver.tryPairSwaps(99999)
+//        solver.tryPairSwaps(99999)
+//
+//        solver.tryKempeChainInterChange()
 
 
 
