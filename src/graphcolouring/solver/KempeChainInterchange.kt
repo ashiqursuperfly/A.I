@@ -12,11 +12,14 @@ class KempeChainInterchange(
     }
 
     fun tryKempeChainInterChange() {
-        val start = feasibleSolution.getRandomCourse(feasibleSolution.courses.map { it.key })
+        val v = feasibleSolution.getRandomCourse(feasibleSolution.courses.map { it.key })
+        val c2 = feasibleSolution.getRandomCourse(v.neighbours.map { it.id }).color
+
+        applyKempe(v, v.color, c2)
 
     }
 
-    /*fun applyKempe() {
+    private fun applyKempe(course: Course, c1: Int, c2: Int) {
         val q = LinkedList<Course>()
         q.push(start)
 
@@ -27,5 +30,5 @@ class KempeChainInterchange(
                 if (it.color)
             }
         }
-    }*/
+    }
 }

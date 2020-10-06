@@ -14,19 +14,9 @@ class PairSwapOperator(
     }
 
     fun tryPairSwaps(n: Int) {
-        val prevPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
         for (i in 0..n) {
-            if (tryPairSwap()) {
-                val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
-                if (prevPenalty >= newPenalty) {
-                    val input = Scanner(System.`in`)
-                    println("Penalty Improved $prevPenalty -> $newPenalty !! Do You Want to Keep Trying ? (y/N)")
-                    if (input.nextLine().trim().equals("y", true)) break
-                }
-
-            }
+            if (tryPairSwap()) break
         }
-
     }
 
     private fun tryPairSwap(): Boolean {
@@ -36,13 +26,24 @@ class PairSwapOperator(
 
         if (isPairSwapValid(randomPair.first, randomPair.second)) {
 
+            val prevPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
+
             println("Before ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
-            randomPair.first.color = randomPair.first.color xor randomPair.second.color
-            randomPair.second.color = randomPair.second.color xor randomPair.first.color
-            randomPair.first.color = randomPair.first.color xor randomPair.second.color
+            swapColors(randomPair.first, randomPair.second)
             println("After ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
 
-            return true
+            val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
+
+            if (prevPenalty > newPenalty) {
+                val input = Scanner(System.`in`)
+                println("Penalty Improved $prevPenalty -> $newPenalty !! Do You Want to Keep Trying ? (y/N)")
+                if (input.nextLine().trim().equals("y", true)) return true
+            } else {
+                //revert since penalty is not improved
+                swapColors(randomPair.first, randomPair.second)
+                return false
+            }
+
         }
 
         return false
@@ -68,6 +69,12 @@ class PairSwapOperator(
 
         if (c1 || c2) return false
         return true
+    }
+
+    fun swapColors(n1: Course, n2: Course) {
+        n1.color = n1.color xor n2.color
+        n2.color = n2.color xor n1.color
+        n1.color = n1.color xor n2.color
     }
 
 }
