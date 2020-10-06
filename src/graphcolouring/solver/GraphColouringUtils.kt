@@ -1,14 +1,16 @@
 package graphcolouring.solver
 
 import graphcolouring.CourseGraph
+import graphcolouring.FileUtil
 import graphcolouring.models.Course
+import java.lang.StringBuilder
 import kotlin.math.abs
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 object GraphColouringUtils {
 
-    fun reCalculatePenalty(graph: CourseGraph): Float {
+    /*fun reCalculatePenalty(graph: CourseGraph): Float {
         val cost = arrayOf(Int.MAX_VALUE, 16, 8, 4, 2, 1)
 
         var penalty = 0
@@ -45,6 +47,47 @@ object GraphColouringUtils {
         }
 
         return (penalty / graph.students.size.toFloat())
+    }*/
+
+    fun reCalculatePenalty(graph: CourseGraph): Float {
+        val cost = arrayOf(Int.MAX_VALUE, 16, 8, 4, 2, 1)
+
+        var penalty = 0
+        graph.students.forEach { student ->
+
+            val studentSchedule = arrayListOf<Int>()
+
+            student.courseIDs.forEach { courseID ->
+                studentSchedule.add(graph.courses[courseID]!!.color)
+            }
+
+            if (studentSchedule.size > 1) {
+
+                //println(studentSchedule)
+
+                for (i1 in 0 until studentSchedule.size-1) {
+                    for (i2 in (i1+1) until studentSchedule.size) {
+                        //println("$i1 $i2")
+                        if (i1 != i2) {
+                            val exam1 = studentSchedule[i1]
+                            val exam2 = studentSchedule[i2]
+
+                            val diff = abs(exam1 - exam2)
+                            if (diff == 0) {
+                                println("Error In Schedule: $studentSchedule")
+                                assertNotEquals(0, diff)
+                            }
+                            if (diff < cost.size) {
+                                penalty += cost[diff]
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return (penalty / graph.students.size.toFloat())
     }
 
     fun assertZeroUnColoredVertices(graph: CourseGraph) {
@@ -70,19 +113,13 @@ object GraphColouringUtils {
         return colors.size
     }
 
-    fun createDetailedReport(graph: CourseGraph, colorsUsed: Int) {
-        var total = 0
-        for (x in 1..colorsUsed) {
-            val colorClass = graph.courses.filter { it.value.color == x  }
-
-            total += colorClass.size
-
-            println("$x ${colorClass.map { it.key }} ${colorClass.size}")
-
+    fun createDetailedReport(fileName: String, graph: CourseGraph) {
+        val sb = StringBuilder()
+        for (item in graph.courses){
+            sb.append("${item.key.toInt()} ${item.value.color-1}").append('\n')
         }
 
-        assertEquals(total, graph.courses.size)
-
+        FileUtil.writeToFile(fileName, sb.toString())
     }
 
 }

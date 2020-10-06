@@ -15,7 +15,7 @@ class PairSwapOperator(
 
     fun tryPairSwaps(n: Int) {
         for (i in 0..n) {
-            if (tryPairSwap()) break
+            tryPairSwap()
         }
     }
 
@@ -28,20 +28,19 @@ class PairSwapOperator(
 
             val prevPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
 
-            println("Before ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
+            //println("Before ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
             swapColors(randomPair.first, randomPair.second)
-            println("After ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
+            //println("After ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
 
             val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
 
-            if (prevPenalty > newPenalty) {
-                val input = Scanner(System.`in`)
-                println("Penalty Improved $prevPenalty -> $newPenalty !! Do You Want to Keep Trying ? (y/N)")
-                if (input.nextLine().trim().equals("y", true)) return true
+            return if (prevPenalty > newPenalty) {
+                println("pairSwap(${randomPair.first},${randomPair.second})) Penalty:$newPenalty")
+                true
             } else {
                 //revert since penalty is not improved
                 swapColors(randomPair.first, randomPair.second)
-                return false
+                false
             }
 
         }

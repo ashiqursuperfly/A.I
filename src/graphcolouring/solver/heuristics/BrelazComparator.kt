@@ -1,4 +1,4 @@
-package graphcolouring.heuristics
+package graphcolouring.solver.heuristics
 
 import graphcolouring.models.Course
 import graphcolouring.models.Course.Companion.UNCOLORED

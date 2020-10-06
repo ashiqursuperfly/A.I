@@ -1,18 +1,13 @@
 package graphcolouring.solver
 
 import graphcolouring.CourseGraph
-import graphcolouring.heuristics.BrelazComparator
-import graphcolouring.heuristics.ConstructiveHeuristic
-import graphcolouring.heuristics.LargestDegreeComparator
-import graphcolouring.heuristics.LargestEnrollmentComparator
-import graphcolouring.models.Course
+import graphcolouring.solver.heuristics.BrelazComparator
+import graphcolouring.solver.heuristics.ConstructiveHeuristic
+import graphcolouring.solver.heuristics.LargestDegreeComparator
+import graphcolouring.solver.heuristics.LargestEnrollmentComparator
 import graphcolouring.models.Course.Companion.UNCOLORED
-import graphcolouring.solver.GraphColouringUtils.reCalculatePenalty
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.abs
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 class GraphColouringFeasibleSolutionGenerator(
     var graph: CourseGraph

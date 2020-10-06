@@ -17,12 +17,12 @@ class KempeChainInterchange(
         if (v.neighbours.size != 0) {
             val c2 = feasibleSolution.getRandomCourse(v.neighbours.map { it.id }).color
             val success = applyKempe(v, v.color, c2)
-            if (success) {
+            /*if (success) {
                 GraphColouringUtils.assertZeroUnColoredVertices(feasibleSolution)
                 GraphColouringUtils.assertNoNeighbourHasParentColor(feasibleSolution)
                 assertEquals(GraphColouringUtils.countColorsUsed(feasibleSolution) , 32)
 
-            }
+            }*/
         }
     }
 
@@ -53,12 +53,13 @@ class KempeChainInterchange(
         val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
 
         return if (newPenalty > prevPenalty) {
+            //revert
             performKempeInterchange(chain, c1, c2)
             assertEquals(prevPenalty.toInt(), GraphColouringUtils.reCalculatePenalty(feasibleSolution).toInt())
             false
         }
         else {
-            println("applyKempe(${v.id}, ${c1}, $c2) Penalty: $newPenalty" )
+            if(newPenalty < prevPenalty)println("applyKempe(${v.id}, ${c1}, $c2) Penalty: $newPenalty" )
             true
         }
 
