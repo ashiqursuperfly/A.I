@@ -54,6 +54,22 @@ object GraphColouringUtils {
         assertEquals(0, uncolored)
     }
 
+    fun assertNoNeighbourHasParentColor(graph: CourseGraph) {
+        graph.courses.forEach { (_, course) ->
+            course.neighbours.forEach {
+                assertNotEquals(course.color, it.color)
+            }
+        }
+    }
+    fun countColorsUsed(graph: CourseGraph): Int {
+        val colors = ArrayList<Int>()
+        graph.courses.forEach { (_, course) ->
+           if (!colors.contains(course.color))
+               colors.add(course.color)
+        }
+        return colors.size
+    }
+
     fun createDetailedReport(graph: CourseGraph, colorsUsed: Int) {
         var total = 0
         for (x in 1..colorsUsed) {
