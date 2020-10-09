@@ -12,10 +12,19 @@ import kotlin.collections.ArrayList
 class GraphColouringFeasibleSolutionGenerator(
     var graph: CourseGraph
 ) {
-    var colorsUsed = 0
+    private var colorsUsed : Int = getInitialColors()
+
+    fun getColorsUsed() : Int {
+        return colorsUsed + 1
+    }
+
+    private fun getInitialColors(): Int {
+        return (graph.students.size/graph.courses.size)
+    }
 
     fun solveConstructive(heuristic: ConstructiveHeuristic) {
-        colorsUsed = 0
+
+        colorsUsed = getInitialColors()
 
         val comparator = when (heuristic) {
             ConstructiveHeuristic.LARGEST_DEGREE_FIRST -> {
@@ -56,8 +65,7 @@ class GraphColouringFeasibleSolutionGenerator(
     }
 
     private fun getAvailableColors(): ArrayList<Int> {
-        if (colorsUsed == 0) return ArrayList()
-        return ArrayList(IntArray(colorsUsed) { i -> i + 1 }.asList())
+        return ArrayList(IntArray(colorsUsed) { i -> i }.asList())
     }
 
 }

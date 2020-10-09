@@ -10,7 +10,7 @@ data class Course (
 
 
     companion object {
-        const val UNCOLORED = 0
+        const val UNCOLORED = -1
     }
 
     override fun toString(): String {

@@ -3,6 +3,7 @@ package graphcolouring.solver
 import graphcolouring.CourseGraph
 import graphcolouring.FileUtil
 import graphcolouring.models.Course
+import graphcolouring.models.Course.Companion.UNCOLORED
 import java.lang.StringBuilder
 import kotlin.math.abs
 import kotlin.test.assertEquals
@@ -107,6 +108,7 @@ object GraphColouringUtils {
     fun countColorsUsed(graph: CourseGraph): Int {
         val colors = ArrayList<Int>()
         graph.courses.forEach { (_, course) ->
+            assertNotEquals(UNCOLORED, course.color)
            if (!colors.contains(course.color))
                colors.add(course.color)
         }
