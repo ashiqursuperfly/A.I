@@ -14,10 +14,6 @@ class GraphColouringFeasibleSolutionGenerator(
 ) {
     private var colorsUsed : Int = getInitialColors()
 
-    fun getColorsUsed() : Int {
-        return colorsUsed + 1
-    }
-
     private fun getInitialColors(): Int {
         return (graph.students.size/graph.courses.size)
     }

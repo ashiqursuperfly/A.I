@@ -93,7 +93,7 @@ object GraphColouringUtils {
 
     fun assertZeroUnColoredVertices(graph: CourseGraph) {
         val uncolored = graph.courses.filter {
-            it.value.color == Course.UNCOLORED
+            it.value.color == UNCOLORED
         }.size
         assertEquals(0, uncolored)
     }
@@ -118,7 +118,7 @@ object GraphColouringUtils {
     fun createDetailedReport(fileName: String, graph: CourseGraph) {
         val sb = StringBuilder()
         for (item in graph.courses){
-            sb.append("${item.key.toInt()} ${item.value.color-1}").append('\n')
+            sb.append("${item.key.toInt()} ${item.value.color}").append('\n')
         }
 
         FileUtil.writeToFile(fileName, sb.toString())

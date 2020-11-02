@@ -1,3 +1,4 @@
+pwd
 ./eval car-s-91.crs car-s-91.stu mysolutions/car-s-91.sol
 ./eval car-f-92.crs car-f-92.stu mysolutions/car-f-92.sol
 ./eval kfu-s-93.crs kfu-s-93.stu mysolutions/kfu-s-93.sol

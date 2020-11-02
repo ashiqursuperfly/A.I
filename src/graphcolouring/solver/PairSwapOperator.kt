@@ -13,34 +13,34 @@ class PairSwapOperator(
         GraphColouringUtils.assertZeroUnColoredVertices(feasibleSolution)
     }
 
-    fun tryPairSwaps(n: Int) {
+    fun tryPairSwaps(n: Int, takeUpwardStepsOnly: Boolean) {
         for (i in 0..n) {
-            tryPairSwap()
+            tryPairSwap(takeUpwardStepsOnly)
         }
     }
 
-    private fun tryPairSwap(): Boolean {
+    private fun tryPairSwap(takeUpwardStepsOnly: Boolean): Boolean {
 
         val randomPair: Pair<Course, Course> = feasibleSolution.getRandomCoursePair()
 
 
         if (isPairSwapValid(randomPair.first, randomPair.second)) {
 
-            val prevPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
-
-            //println("Before ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
-            swapColors(randomPair.first, randomPair.second)
-            //println("After ${randomPair.first.id},${randomPair.first.color} ${randomPair.second.id},${randomPair.second.color}")
-
-            val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
-
-            return if (prevPenalty > newPenalty) {
-                println("pairSwap(${randomPair.first},${randomPair.second})) Penalty:$newPenalty")
-                true
-            } else {
-                //revert since penalty is not improved
+            if (takeUpwardStepsOnly) {
+                val prevPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
                 swapColors(randomPair.first, randomPair.second)
-                false
+                val newPenalty = GraphColouringUtils.reCalculatePenalty(feasibleSolution)
+                return if (prevPenalty > newPenalty) {
+                    true
+                } else {
+                    // revert
+                    swapColors(randomPair.first, randomPair.second)
+                    false
+                }
+            }
+            else {
+                swapColors(randomPair.first, randomPair.second)
+                return true
             }
 
         }
@@ -58,13 +58,6 @@ class PairSwapOperator(
 
         val c1 = node1.neighbours.map { it.color }.contains(node2.color)
         val c2 = node2.neighbours.map { it.color }.contains(node1.color)
-
-        if (c1) {
-            assertEquals(node1.neighbours.find { it.color == node2.color }?.color, node2.color)
-        }
-        if (c2) {
-            assertEquals(node2.neighbours.find { it.color == node1.color }?.color, node1.color)
-        }
 
         if (c1 || c2) return false
         return true

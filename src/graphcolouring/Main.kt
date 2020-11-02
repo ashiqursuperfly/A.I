@@ -2,7 +2,7 @@ package graphcolouring
 
 import graphcolouring.solver.heuristics.ConstructiveHeuristic
 import graphcolouring.solver.GraphColouringFeasibleSolutionGenerator
-import graphcolouring.solver.GraphColouringUtils
+import graphcolouring.solver.GraphColouringUtils as GCU
 import graphcolouring.solver.KempeChainInterchange
 import graphcolouring.solver.PairSwapOperator
 
@@ -24,29 +24,24 @@ fun main () {
         val solver = GraphColouringFeasibleSolutionGenerator(courseGraph)
         solver.solveConstructive(ConstructiveHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION)
 
-        GraphColouringUtils.assertZeroUnColoredVertices(solver.graph)
-        GraphColouringUtils.assertNoNeighbourHasParentColor(solver.graph)
+        GCU.assertZeroUnColoredVertices(solver.graph)
+        GCU.assertNoNeighbourHasParentColor(solver.graph)
 
-        val penalty = GraphColouringUtils.reCalculatePenalty(solver.graph)
-        println("${courseFiles[i]}, ${solver.getColorsUsed()}, $penalty")
-        println(GraphColouringUtils.countColorsUsed(courseGraph))
-        /*
-       val kempe = KempeChainInterchange(solver.graph)
-       for (x in 0..courseGraph.courses.size) {
-           kempe.tryKempeChainInterChange()
-       }
-
-       val penalty2 = GraphColouringUtils.reCalculatePenalty(solver.graph)
-       println("${courseFiles[i]}, ${solver.getColorsUsed()}, $penalty2")
+        val kempe = KempeChainInterchange(solver.graph)
+        kempe.kempeChainInterchangeFromAllVertices(false)
+        kempe.tryRandomKempeChainInterChange(10000, true)
 
 
-       val pairSwapper = PairSwapOperator(solver.graph)
-       pairSwapper.tryPairSwaps(solver.graph.courses.size)
+        val pairSwapper = PairSwapOperator(solver.graph)
+        pairSwapper.tryPairSwaps(100000, true)
 
-       val penalty3 = GraphColouringUtils.reCalculatePenalty(solver.graph)
-       println("${courseFiles[i]}, ${solver.colorsUsed}, $penalty3")
 
-       GraphColouringUtils.createDetailedReport("${courseFiles[i].split('.')[0]}.sol",courseGraph)*/
+        println("${courseFiles[i]}, ${GCU.countColorsUsed(courseGraph)}, ${GCU.reCalculatePenalty(solver.graph)}")
+
+        GCU.assertZeroUnColoredVertices(solver.graph)
+        GCU.assertNoNeighbourHasParentColor(solver.graph)
+
+        //GCU.createDetailedReport("${courseFiles[i].split('.')[0]}.sol",solver.graph)
 
 
     }
