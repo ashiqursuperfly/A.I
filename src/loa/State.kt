@@ -3,8 +3,8 @@ package loa
 import java.lang.StringBuilder
 
 data class State(
-    val white: Player = Player(PlayerType.W),
-    val black: Player = Player(PlayerType.B),
+    val white: Player = Player(BoardPosition.ItemType.W),
+    val black: Player = Player(BoardPosition.ItemType.B),
     val loaFactory: LOAFactory = LOAFactory(),
     val board: Array<Array<BoardPosition>> = Array(8) {
         i -> Array(8) {
@@ -83,20 +83,47 @@ data class State(
         println("TOTAL LOA: ${loaFactory.all.size}")
     }
 
+    fun applyMove(move: Move) : Boolean {
+        val player = if (move.playerType == BoardPosition.ItemType.W) white else black
+        val startPos = board[move.startCoord.first][move.startCoord.second]
+        val endPos = board[move.endCoord.first][move.endCoord.second]
+
+        val selectedLOA = startPos.getLOA(endPos) ?: return false
+        val startOtherLOAs = startPos.getOtherLOAs(selectedLOA)
+        val endOtherLOAs = endPos.getOtherLOAs(selectedLOA)
+
+        for (item in startOtherLOAs)
+            item.checkerCount--
+
+        for (item in endOtherLOAs)
+            item.checkerCount++
+
+        startPos.item = BoardPosition.ItemType.E
+        endPos.item = player.type
+
+        player.checkers.remove(startPos)
+        player.checkers.add(endPos)
+
+        // TODO:
+
+        return true
+    }
+
+
     fun printBoard() {
 
         val sb = StringBuilder()
 
-        sb.append(' ').append(' ')
+        sb.append(' ').append(' ').append(' ')
         for (i in 0 until 8) {
-            sb.append(i).append(" ")
+            sb.append(i).append(' ').append(' ').append(' ')
         }
         sb.append('\n')
 
         for (i in 0 until 8) {
-            sb.append(i).append(' ')
+            sb.append(i).append(' ').append(' ')
             for (j in 0 until 8) {
-                sb.append(board[i][j].item.value).append('-')
+                sb.append(board[i][j].item.value).append(' ').append('-').append(' ')
             }
             sb.append('\n')
         }
