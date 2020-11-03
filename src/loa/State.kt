@@ -4,7 +4,7 @@ data class State(
     val loaFactory: LOAFactory = LOAFactory(),
     val board: Array<Array<BoardPosition>> = Array(8) {
         i -> Array(8) {
-            j -> BoardPosition(0, 0)
+            j -> BoardPosition(row = 0, col = 0)
         }
     }
 )
@@ -12,11 +12,8 @@ data class State(
     init {
         for (i in 0 until 8) {
             for (j in 0 until 8) {
-                val b = BoardPosition(
-                        row = i,
-                        col = j
-                )
-                board[i][j] = b
+                board[i][j].row = i
+                board[i][j].col = j
             }
         }
         initLOAs()

@@ -1,7 +1,5 @@
 package loa
 
-import java.lang.StringBuilder
-
 class LOAFactory {
 
     enum class LOAType {
@@ -10,7 +8,7 @@ class LOAFactory {
 
     val all = HashMap<String, LOA>()
 
-    private fun getKey(type: LOAType, center: BoardPosition) : ArrayList<Pair<Int, Int>> {
+    private fun getCoords(type: LOAType, center: BoardPosition): ArrayList<Pair<Int, Int>> {
 
         val row = center.row
         val col = center.col
@@ -55,8 +53,8 @@ class LOAFactory {
         return key
     }
 
-    fun getOrCreate(type: LOAType, center: BoardPosition, state: State) : LOA {
-        val coords = getKey(type, center)
+    fun getOrCreate(type: LOAType, center: BoardPosition, state: State): LOA {
+        val coords = getCoords(type, center)
 
         val data = all[coords.toString()]
 
