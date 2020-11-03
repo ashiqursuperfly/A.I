@@ -1,11 +1,14 @@
-package loa;
+package loa_demo;
 
-public class State 
+import loa.BoardPosition;
+
+class State
 {
 	private static final int boardSize=8;
 	public static final char W='X',B='O',EMPTY='_';
 
 	char board[][]= new char[boardSize][boardSize];
+
 	public State()
 	{
 		for(int i=0;i<boardSize;i++)

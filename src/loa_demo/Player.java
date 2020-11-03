@@ -1,6 +1,6 @@
-package loa;
+package loa_demo;
 
-public class Player {
+class Player {
 	// player can be W or B 
 	public static final char W='X',B='O',ZERO='_';
 	public char name;

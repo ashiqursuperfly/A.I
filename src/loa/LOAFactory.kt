@@ -60,7 +60,7 @@ class LOAFactory {
 
         if (data != null) return data
         else {
-            println("${type.name} : $coords ")
+            // println("${type.name} : $coords ")
             val l = LOA()
             for (item in coords) {
                 l.path.add(state.board[item.first][item.second])

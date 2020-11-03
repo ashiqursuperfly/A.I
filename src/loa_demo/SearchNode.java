@@ -1,8 +1,8 @@
-package loa;
+package loa_demo;
 
 import java.util.Arrays;
 
-public class SearchNode {
+class SearchNode {
 	
 	public int[] move;
 	public int value;

@@ -1,4 +1,4 @@
-package loa;
+package loa_demo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.Scanner;
  * <p> The second element move[1] will correspond to column
  */
 
-public class LoaGame {
+class LoaGame {
 	private static int depth;
 	public static final char W='X',B='O',EMPTY='_';
 	State gameState;
