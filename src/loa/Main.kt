@@ -29,6 +29,9 @@ fun main() {
                 println("Format:- (W|B)-startRow:startCol-endRow:endCol")
 
                 val move = readLine()?.split('-')
+
+                println(move)
+
                 if (move.isNullOrEmpty()) return
 
                 val player = move[0].trim()

@@ -6,16 +6,16 @@ data class State(
     val white: Player = Player(BoardPosition.ItemType.W),
     val black: Player = Player(BoardPosition.ItemType.B),
     val loaFactory: LOAFactory = LOAFactory(),
-    val board: Array<Array<BoardPosition>> = Array(8) {
-        i -> Array(8) {
+    val board: Array<Array<BoardPosition>> = Array(Constants.BOARD_SIZE) {
+        i -> Array(Constants.BOARD_SIZE) {
             j -> BoardPosition(row = 0, col = 0)
         }
     }
 )
 {
     init {
-        for (i in 0 until 8) {
-            for (j in 0 until 8) {
+        for (i in 0 until Constants.BOARD_SIZE) {
+            for (j in 0 until Constants.BOARD_SIZE) {
                 board[i][j].row = i
                 board[i][j].col = j
             }
@@ -26,14 +26,14 @@ data class State(
     }
 
     private fun initWhiteCheckers() {
-        for (i in 1 until 7) {
+        for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[i][0]
             bp.item = BoardPosition.ItemType.W
             black.checkers.add(bp)
             bp.incrementAllLOAs()
         }
-        for (i in 1 until 7) {
-            val bp = board[i][7]
+        for (i in 1 until Constants.BOARD_SIZE-1) {
+            val bp = board[i][Constants.BOARD_SIZE-1]
             bp.item = BoardPosition.ItemType.W
             black.checkers.add(bp)
             bp.incrementAllLOAs()
@@ -41,14 +41,14 @@ data class State(
     }
 
     private fun initBlackCheckers() {
-        for (i in 1 until 7) {
+        for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[0][i]
             bp.item = BoardPosition.ItemType.B
             white.checkers.add(bp)
             bp.incrementAllLOAs()
         }
-        for (i in 1 until 7) {
-            val bp = board[7][i]
+        for (i in 1 until Constants.BOARD_SIZE-1) {
+            val bp = board[Constants.BOARD_SIZE-1][i]
             bp.item = BoardPosition.ItemType.B
             white.checkers.add(bp)
             bp.incrementAllLOAs()
@@ -56,8 +56,8 @@ data class State(
     }
 
     private fun initLOAs() {
-        for (i in 0 until 8) {
-            for (j in 0 until 8) {
+        for (i in 0 until Constants.BOARD_SIZE) {
+            for (j in 0 until Constants.BOARD_SIZE) {
                 board[i][j].horizontal = loaFactory.getOrCreate(
                     LOAFactory.LOAType.H,
                     board[i][j],
@@ -105,6 +105,8 @@ data class State(
         player.checkers.add(endPos)
 
         // TODO:
+        //  add capturing logic
+        //  add overtaking logic
 
         return true
     }
@@ -115,14 +117,14 @@ data class State(
         val sb = StringBuilder()
 
         sb.append(' ').append(' ').append(' ')
-        for (i in 0 until 8) {
+        for (i in 0 until Constants.BOARD_SIZE) {
             sb.append(i).append(' ').append(' ').append(' ')
         }
         sb.append('\n')
 
-        for (i in 0 until 8) {
+        for (i in 0 until Constants.BOARD_SIZE) {
             sb.append(i).append(' ').append(' ')
-            for (j in 0 until 8) {
+            for (j in 0 until Constants.BOARD_SIZE) {
                 sb.append(board[i][j].item.value).append(' ').append('-').append(' ')
             }
             sb.append('\n')

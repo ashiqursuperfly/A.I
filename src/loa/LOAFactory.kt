@@ -16,12 +16,12 @@ class LOAFactory {
         val key = ArrayList<Pair<Int, Int>>()
         when (type) {
             LOAType.H -> {
-                for (i in 0 until 8) {
+                for (i in 0 until Constants.BOARD_SIZE) {
                     key.add(Pair(row, i))
                 }
             }
             LOAType.V -> {
-                for (i in 0 until 8) {
+                for (i in 0 until Constants.BOARD_SIZE) {
                     key.add(Pair(i, col))
                 }
             }
@@ -32,18 +32,18 @@ class LOAFactory {
                     tr--
                     tc--
                 }
-                while (tr < 8 && tc < 8) {
+                while (tr < Constants.BOARD_SIZE && tc < Constants.BOARD_SIZE) {
                     key.add(Pair(tr++, tc++))
                 }
             }
             LOAType.BL_TR -> {
                 var tr = row
                 var tc = col
-                while (tr < 7 && tc > 0) {
+                while (tr < Constants.BOARD_SIZE-1 && tc > 0) {
                     tr++
                     tc--
                 }
-                while (tr >= 0 && tc < 8) {
+                while (tr >= 0 && tc < Constants.BOARD_SIZE) {
                     key.add(Pair(tr--, tc++))
                 }
 
