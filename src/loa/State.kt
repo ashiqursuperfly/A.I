@@ -30,13 +30,13 @@ data class State(
             val bp = board[i][0]
             bp.item = BoardPosition.ItemType.W
             black.checkers.add(bp)
-            bp.incrementAllLOAs()
+            bp.incrementAllLOACheckerCounts()
         }
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[i][Constants.BOARD_SIZE-1]
             bp.item = BoardPosition.ItemType.W
             black.checkers.add(bp)
-            bp.incrementAllLOAs()
+            bp.incrementAllLOACheckerCounts()
         }
     }
 
@@ -45,13 +45,13 @@ data class State(
             val bp = board[0][i]
             bp.item = BoardPosition.ItemType.B
             white.checkers.add(bp)
-            bp.incrementAllLOAs()
+            bp.incrementAllLOACheckerCounts()
         }
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[Constants.BOARD_SIZE-1][i]
             bp.item = BoardPosition.ItemType.B
             white.checkers.add(bp)
-            bp.incrementAllLOAs()
+            bp.incrementAllLOACheckerCounts()
         }
     }
 
@@ -83,20 +83,16 @@ data class State(
         println("TOTAL LOA: ${loaFactory.all.size}")
     }
 
-    fun applyMove(move: Move) : Boolean {
-        val player = if (move.playerType == BoardPosition.ItemType.W) white else black
-        val opponent = if (move.playerType == BoardPosition.ItemType.W) black else white
+    fun applyMove(validMove: Move) : Boolean {
+        val player = if (validMove.playerType == BoardPosition.ItemType.W) white else black
+        val opponent = if (validMove.playerType == BoardPosition.ItemType.W) black else white
 
-        val startPos = board[move.startCoord.first][move.startCoord.second]
-        val endPos = board[move.endCoord.first][move.endCoord.second]
+        val startPos = board[validMove.startCoord.first][validMove.startCoord.second]
+        val endPos = board[validMove.endCoord.first][validMove.endCoord.second]
 
         val selectedLOA = startPos.getLOA(endPos) ?: return false
         val startOtherLOAs = startPos.getOtherLOAs(selectedLOA)
         val endOtherLOAs = endPos.getOtherLOAs(selectedLOA)
-
-        // TODO:
-        //  add capturing logic
-        //  add overtaking logic
 
         for (item in startOtherLOAs)
             item.checkerCount--
@@ -133,7 +129,7 @@ data class State(
         for (i in 0 until Constants.BOARD_SIZE) {
             sb.append(i).append(' ').append(' ')
             for (j in 0 until Constants.BOARD_SIZE) {
-                sb.append(board[i][j].item.value).append(' ').append('-').append(' ')
+                sb.append(board[i][j].item.value).append(' ').append(Constants.BOARD_CHAR_SEPARATOR).append(' ')
             }
             sb.append('\n')
         }

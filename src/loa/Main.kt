@@ -29,42 +29,54 @@ fun main() {
             "2" -> {
                 if (turn % 2 == 0) {
                     println("BLACK's Turn")
-                }
-                else {
+                } else {
                     println("WHITE's Turn")
                 }
+                println("Select Checker: \nFormat:- r:c")
 
-                println("Format:- (W|B)-startRow:startCol-endRow:endCol")
+                val coords = readLine()?.split(':')
+                if (coords.isNullOrEmpty()) return
 
-                val move = readLine()?.split('-')
+                val row = coords[0].toInt()
+                val col = coords[1].toInt()
 
-                println(move)
 
-                if (move.isNullOrEmpty()) return
+                val bp = init.board[row][col]
+                if (bp.item == BoardPosition.ItemType.W && turn % 2 == 0) {
+                    println("Please Select a BLACK Checker")
+                    continue
+                }
+                else if (bp.item == BoardPosition.ItemType.B && turn % 2 != 0) {
+                    println("Please Select a WHITE Checker")
+                    continue
+                }
+                else if (bp.item == BoardPosition.ItemType.E) {
+                    println("Selected Board Position EMPTY !!")
+                    continue
+                }
 
-                val player = move[0].trim()
+                val moves = bp.getValidMoves()
+                if (!moves.isNullOrEmpty()) println("Select Move:")
+                else {
+                    println("No Valid Moves")
+                    continue
+                }
+                for (item in moves.withIndex()) {
+                    println("${item.index}. ${moves[item.index]}")
+                }
 
-                val startPos = move[1].split(':')
-                val endPos = move[2].split(':')
+                val selected = readLine()
+                if (!selected.isNullOrBlank()) {
+                    val moveIdx = selected.toInt()
 
-                val sr = startPos[0].toInt()
-                val sc = startPos[1].toInt()
-
-                val fr = endPos[0].toInt()
-                val fc = endPos[1].toInt()
-
-                val m = Move(
-                    playerType = if (player == "W") BoardPosition.ItemType.W else BoardPosition.ItemType.B,
-                    startCoord = Pair(sr, sc),
-                    endCoord = Pair(fr, fc)
-                )
-                val r = init.applyMove(m)
-                if (r) {
-                    println("After Applying move:$m")
-                    init.printBoard()
-                    turn++
-                } else {
-                    println("Invalid Move")
+                    val r = init.applyMove(moves[moveIdx])
+                    if (r) {
+                        println("After Applying move:$moveIdx")
+                        init.printBoard()
+                        turn++
+                    } else {
+                        println("Invalid Move")
+                    }
                 }
 
             }
