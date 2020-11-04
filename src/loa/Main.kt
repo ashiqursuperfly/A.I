@@ -1,7 +1,8 @@
 package loa
 
 fun main() {
-    val init = State()
+    var init = State()
+    init.initDefaultBoard()
     init.printBoard()
 
     var turn = 0
@@ -20,10 +21,10 @@ fun main() {
                 val row = coords[0].toInt()
                 val col = coords[1].toInt()
 
-                println("H: ${init.board[row][col].horizontal.checkerCount}")
-                println("V: ${init.board[row][col].vertical.checkerCount}")
-                println("TL_BR: ${init.board[row][col].topLeftToBottomRight.checkerCount}")
-                println("BL_TR: ${init.board[row][col].bottomLeftToTopRight.checkerCount}")
+                println("H: ${init.board[row]!![col].horizontal.checkerCount}")
+                println("V: ${init.board[row]!![col].vertical.checkerCount}")
+                println("TL_BR: ${init.board[row]!![col].topLeftToBottomRight.checkerCount}")
+                println("BL_TR: ${init.board[row]!![col].bottomLeftToTopRight.checkerCount}")
 
             }
             "2" -> {
@@ -41,7 +42,7 @@ fun main() {
                 val col = coords[1].toInt()
 
 
-                val bp = init.board[row][col]
+                val bp = init.board[row]!![col]
                 if (bp.item == BoardPosition.ItemType.W && turn % 2 == 0) {
                     println("Please Select a BLACK Checker")
                     continue
@@ -68,11 +69,14 @@ fun main() {
                 val selected = readLine()
                 if (!selected.isNullOrBlank()) {
                     val moveIdx = selected.toInt()
-
-                    val r = init.applyMove(moves[moveIdx])
+                    val clone = init.getClone()
+                    val r = clone.applyMove(moves[moveIdx])
                     if (r) {
                         println("After Applying move:$moveIdx")
+                        clone.printBoard()
+                        println("Before Applying move")
                         init.printBoard()
+                        init = clone
                         turn++
                     } else {
                         println("Invalid Move")

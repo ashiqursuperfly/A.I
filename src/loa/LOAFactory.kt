@@ -63,7 +63,7 @@ class LOAFactory {
             // println("${type.name} : $coords ")
             val l = LOA()
             for (item in coords) {
-                l.path.add(state.board[item.first][item.second])
+                l.path.add(state.board[item.first]!![item.second])
             }
             all[coords.toString()] = l
             return l

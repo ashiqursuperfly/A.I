@@ -12,7 +12,7 @@ data class BoardPosition(
 	var bottomLeftToTopRight: LOA = LOA()
 ) {
 	enum class ItemType(var value: String) {
-		W("W"), B("B"), E("*");
+		W("W"), B("B"), E("_");
 	}
 
 	fun getLOA(endPos: BoardPosition) : LOA? {
@@ -198,6 +198,8 @@ data class BoardPosition(
 			it.row == move.endCoord.first && it.col == move.endCoord.second
 		}
 
+		if (move.playerType == end?.item) return false
+
 		val startIdx = loa.path.indexOf(start)
 		if (dir == 1) {
 			for (i in startIdx until loa.path.size) {
@@ -245,5 +247,7 @@ data class BoardPosition(
 		result = 31 * result + col
 		return result
 	}
+
+
 
 }
