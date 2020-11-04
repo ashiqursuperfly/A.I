@@ -4,6 +4,7 @@ fun main() {
     val init = State()
     init.printBoard()
 
+    var turn = 0
     while (true) {
 
         println("1. Get Checker Counts  \n2. ApplyMove \n3. PrintBoard")
@@ -26,6 +27,13 @@ fun main() {
 
             }
             "2" -> {
+                if (turn % 2 == 0) {
+                    println("BLACK's Turn")
+                }
+                else {
+                    println("WHITE's Turn")
+                }
+
                 println("Format:- (W|B)-startRow:startCol-endRow:endCol")
 
                 val move = readLine()?.split('-')
@@ -54,6 +62,7 @@ fun main() {
                 if (r) {
                     println("After Applying move:$m")
                     init.printBoard()
+                    turn++
                 } else {
                     println("Invalid Move")
                 }

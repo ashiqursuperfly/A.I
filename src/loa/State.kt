@@ -85,6 +85,8 @@ data class State(
 
     fun applyMove(move: Move) : Boolean {
         val player = if (move.playerType == BoardPosition.ItemType.W) white else black
+        val opponent = if (move.playerType == BoardPosition.ItemType.W) black else white
+
         val startPos = board[move.startCoord.first][move.startCoord.second]
         val endPos = board[move.endCoord.first][move.endCoord.second]
 
@@ -92,21 +94,27 @@ data class State(
         val startOtherLOAs = startPos.getOtherLOAs(selectedLOA)
         val endOtherLOAs = endPos.getOtherLOAs(selectedLOA)
 
+        // TODO:
+        //  add capturing logic
+        //  add overtaking logic
+
         for (item in startOtherLOAs)
             item.checkerCount--
 
-        for (item in endOtherLOAs)
-            item.checkerCount++
+        if (endPos.item == opponent.type) {
+            opponent.checkers.remove(endPos)
+            selectedLOA.checkerCount--
+        }
+        else {
+            for (item in endOtherLOAs)
+                item.checkerCount++
+        }
 
         startPos.item = BoardPosition.ItemType.E
         endPos.item = player.type
 
         player.checkers.remove(startPos)
         player.checkers.add(endPos)
-
-        // TODO:
-        //  add capturing logic
-        //  add overtaking logic
 
         return true
     }
