@@ -12,8 +12,9 @@ data class BoardPosition(
 	var bottomLeftToTopRight: LOA = LOA()
 ) {
 	enum class ItemType(var value: String) {
-		W("W"), B("B"), E("_");
+		W("⚫"), B("⚪"), E("_");
 	}
+
 
 	fun getLOA(endPos: BoardPosition) : LOA? {
 		return when {

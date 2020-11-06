@@ -1,4 +1,3 @@
-
 package loa
 
 import java.lang.IllegalArgumentException
@@ -40,8 +39,88 @@ class MinMaxAI(
         return maxSum - minSum
     }
 
-    private fun isGameOver(state: State): Boolean {
-        return false
+    fun isGameOver(state: State): Boolean {
+        if (isGameOver(state.black)) {
+            return true
+        }
+        else return isGameOver(state.white)
+    }
+
+    private fun isGameOver(player: Player): Boolean {
+
+        if (player.checkers.size <= 1) return true
+
+
+        val forest = HashSet<Pair<Int, Int>>()
+
+        val availablePositions = HashSet<Pair<Int, Int>>()
+        availablePositions.addAll(findAdjacentPositions(player.checkers[0].row, player.checkers[0].col))
+        forest.add(Pair(player.checkers[0].row, player.checkers[0].col))
+
+        var totalConnectedNodes = 1 // 0 is by default in the forest
+
+        while(totalConnectedNodes < player.checkers.size) {
+
+            val inForest = player.checkers.filter {
+                val it2 = Pair(it.row, it.col)
+                availablePositions.contains(it2)
+            }
+
+            totalConnectedNodes += inForest.size
+
+            if (inForest.isNullOrEmpty()) return false
+
+            for (item in inForest) {
+                val it = Pair(item.row, item.col)
+                availablePositions.remove(it)
+                forest.add(it)
+                val uniqueAdjacent = findAdjacentPositions(item.row, item.col).filter {
+                    !forest.contains(it)
+                }
+                availablePositions.addAll(uniqueAdjacent)
+            }
+
+        }
+
+        return true
+    }
+
+    private fun findAdjacentPositions(row: Int, col: Int): ArrayList<Pair<Int, Int>> {
+
+        val list = ArrayList<Pair<Int, Int>>()
+
+        val top = row - 1
+        val left = col - 1
+        val down = row + 1
+        val right = col + 1
+
+        if (top >= 0) {
+            list.add(Pair(top, col))
+            if (left >= 0) {
+                list.add(Pair(top, left))
+            }
+            if (right < Constants.BOARD_SIZE) {
+                list.add(Pair(top, right))
+            }
+        }
+        if (down < Constants.BOARD_SIZE) {
+            list.add(Pair(down, col))
+            if (left >= 0) {
+                list.add(Pair(down, left))
+            }
+            if (right < Constants.BOARD_SIZE) {
+                list.add(Pair(down, right))
+            }
+        }
+        if (left >= 0) {
+            list.add(Pair(row, left))
+        }
+        if (right < Constants.BOARD_SIZE) {
+            list.add(Pair(row, right))
+        }
+
+        return list
+
     }
 
     fun getMinMaxAIMove(): State {
@@ -56,9 +135,7 @@ class MinMaxAI(
                 Int.MAX_VALUE,
                 null
             )
-        }
-
-        else  { // if (playerType == Constants.MINIMIZING_PLAYER)
+        } else { // if (playerType == Constants.MINIMIZING_PLAYER)
             result = minValue(
                 root,
                 maxDepth,
@@ -124,7 +201,7 @@ class MinMaxAI(
         alpha: Int,
         beta: Int,
         latestMove: Move?
-    ) : Triple<State, Move?, Int> {
+    ): Triple<State, Move?, Int> {
 
         if (depth == 0 || isGameOver(state)) {
             return Triple(state, latestMove, getStaticEvaluation(state.white, state.black))
@@ -162,4 +239,21 @@ class MinMaxAI(
         return Triple(maxState, maxMove, maxEvaluation)
 
     }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val board = State()
+            val minMax = MinMaxAI(
+                maxDepth = 3,
+                root = board,
+                ai
+            )
+            board.initDefaultBoard()
+            minMax.isGameOver(board)
+            //minMax.findAdjacentPositions(0,1)
+        }
+    }
+
 }
+

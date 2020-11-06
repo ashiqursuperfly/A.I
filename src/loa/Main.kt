@@ -14,7 +14,7 @@ fun main() {
 
         println("1. Get Checker Counts  \n2. ApplyMove \n3. PrintBoard")
 
-        val input = readLine()
+        val input = "2"
 
         when (input?.trim()) {
             "1" -> {
@@ -34,12 +34,24 @@ fun main() {
             "2" -> {
                 if (turn % 2 == 0) {
                     println("BLACK's Turn")
-                    if (ai == BoardPosition.ItemType.B) aiMove()
-                    else userMove()
+                    var res = false
+                    if (ai == BoardPosition.ItemType.B) res = aiMove()
+                    else res = userMove()
+
+                    if (res) {
+                        println("GAME-OVER")
+                        break
+                    }
                 } else {
                     println("WHITE's Turn")
-                    if (ai == BoardPosition.ItemType.W) aiMove()
-                    else userMove()
+                    var res = false
+                    if (ai == BoardPosition.ItemType.W) res = aiMove()
+                    else res = userMove()
+
+                    if (res) {
+                        println("GAME-OVER")
+                        break
+                    }
                 }
             }
             "3" -> {
@@ -52,21 +64,59 @@ fun main() {
     }
 }
 
-fun aiMove() {
+fun aiMove() : Boolean {
     val minMax = MinMaxAI(
-        maxDepth = 3,
+        maxDepth = 2,
         root = board,
         ai
     )
+    if (minMax.isGameOver(board)) {
+        println("$player WINS")
+        return true
+    }
+    val startTime = System.currentTimeMillis()
     println("A.I is thinking !")
     val result = minMax.getMinMaxAIMove()
+    val endTime = System.currentTimeMillis()
+    println("Time Taken : ${(endTime-startTime)/1000} s")
     board = result
     board.printBoard()
     turn++
+
+    if (minMax.isGameOver(board)) {
+        println("$ai WINS")
+        return true
+    }
+
+    return false
+
 }
 
-fun userMove() {
-    println("Select Checker: \nFormat:- r:c")
+fun userMove() : Boolean {
+    val minMax = MinMaxAI(
+        maxDepth = 2,
+        root = board,
+        player
+    )
+    if (minMax.isGameOver(board)) {
+        println("$ai WINS")
+        return true
+    }
+    println("A.I is thinking !")
+    val startTime = System.currentTimeMillis()
+    val result = minMax.getMinMaxAIMove()
+    val endTime = System.currentTimeMillis()
+    println("Time Taken : ${(endTime-startTime)/1000} s")
+    board = result
+    board.printBoard()
+    turn++
+    if (minMax.isGameOver(board)) {
+        println("$player WINS")
+        return true
+    }
+    return false
+
+    /*println("Select Checker: \nFormat:- r:c")
 
     val coords = readLine()?.split(':')
     if (coords.isNullOrEmpty()) return
@@ -107,15 +157,16 @@ fun userMove() {
         if (r) {
             println("After Applying move:$moveIdx")
 
-            /*clone.printBoard()
+            *//*clone.printBoard()
             println("Before Applying move")
-            init.printBoard()*/
+            init.printBoard()*//*
             board = clone
             board.printBoard()
             turn++
         } else {
             println("Invalid Move")
         }
-    }
+    }*/
+
 
 }
