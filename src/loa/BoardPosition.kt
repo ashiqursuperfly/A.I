@@ -58,11 +58,12 @@ data class BoardPosition(
 		val tlbr = getDiagonalLOAMoves(topLeftToBottomRight)
 		val bltr = getDiagonalLOAMoves(bottomLeftToTopRight)
 
+		/*
 		println("h: $h")
 		println("v: $v")
 		println("tlbr: $tlbr")
 		println("bltr: $bltr")
-
+		*/
 		moves.addAll(h)
 		moves.addAll(v)
 		moves.addAll(bltr)

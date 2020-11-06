@@ -7,8 +7,8 @@ data class State(
     val white: Player = Player(BoardPosition.ItemType.W),
     val black: Player = Player(BoardPosition.ItemType.B),
     val loaFactory: LOAFactory = LOAFactory(),
-    var board: Array<Array<BoardPosition>?> = Array(Constants.BOARD_SIZE) {i ->
-        Array(Constants.BOARD_SIZE) {j ->
+    var board: Array<Array<BoardPosition>?> = Array(Constants.BOARD_SIZE) { i ->
+        Array(Constants.BOARD_SIZE) { j ->
             BoardPosition(row = i, col = j)
         }
     }
@@ -73,13 +73,13 @@ data class State(
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[i]!![0]
             bp.item = BoardPosition.ItemType.W
-            black.checkers.add(bp)
+            white.checkers.add(bp)
             bp.incrementAllLOACheckerCounts()
         }
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[i]!![Constants.BOARD_SIZE-1]
             bp.item = BoardPosition.ItemType.W
-            black.checkers.add(bp)
+            white.checkers.add(bp)
             bp.incrementAllLOACheckerCounts()
         }
     }
@@ -88,13 +88,13 @@ data class State(
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[0]!![i]
             bp.item = BoardPosition.ItemType.B
-            white.checkers.add(bp)
+            black.checkers.add(bp)
             bp.incrementAllLOACheckerCounts()
         }
         for (i in 1 until Constants.BOARD_SIZE-1) {
             val bp = board[Constants.BOARD_SIZE-1]!![i]
             bp.item = BoardPosition.ItemType.B
-            white.checkers.add(bp)
+            black.checkers.add(bp)
             bp.incrementAllLOACheckerCounts()
         }
     }
@@ -124,7 +124,6 @@ data class State(
                 )
             }
         }
-        println("TOTAL LOA: ${loaFactory.all.size}")
     }
 
     fun applyMove(validMove: Move) : Boolean {

@@ -490,8 +490,8 @@ class LoaGame {
 			}
 		} 
 	}
-	
-	private int[][] movesPossible(State currentState, Player player) 
+
+	private int[][] movesPossible(State currentState, Player player)
 	{
 		ArrayList<int[]> movesPossible = new ArrayList<int[]>();
 		
@@ -971,10 +971,10 @@ class LoaGame {
 		{
 			for(int[]move : possibleActions)
 			{
-				State newState= getNextState(nextState,move,player);
+				State newState = getNextState(nextState,move,player);
 				nodesExpanded++;
 				int val = minValue(newState,move,player.getOpponent(),depth+1,maxDepth,alpha,beta);
-				SearchNode node= new SearchNode(move,val);
+				SearchNode node = new SearchNode(move,val);
 				nodesBucket.add(node);
 				sortBucketNodesForMax(nodesBucket);
 				alpha = nodesBucket.get(0).getValue();
