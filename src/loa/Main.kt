@@ -1,8 +1,8 @@
 package loa
 
 
-val player = BoardPosition.ItemType.B
-val ai = BoardPosition.ItemType.W
+val player = BoardPosition.ItemType.W
+val ai = BoardPosition.ItemType.B
 var board = State()
 var turn = 0
 

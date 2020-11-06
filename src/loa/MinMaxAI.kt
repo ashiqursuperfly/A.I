@@ -1,5 +1,7 @@
+
 package loa
 
+import java.lang.IllegalArgumentException
 import java.lang.Integer.max
 import java.lang.Integer.min
 
@@ -42,96 +44,122 @@ class MinMaxAI(
         return false
     }
 
-    private fun getMinMax(
+    fun getMinMaxAIMove(): State {
+
+        val result: Triple<State, Move?, Int>
+
+        if (playerType == Constants.MAXIMIZING_PLAYER) {
+            result = maxValue(
+                root,
+                maxDepth,
+                Int.MIN_VALUE,
+                Int.MAX_VALUE,
+                null
+            )
+        }
+
+        else  { // if (playerType == Constants.MINIMIZING_PLAYER)
+            result = minValue(
+                root,
+                maxDepth,
+                Int.MIN_VALUE,
+                Int.MAX_VALUE,
+                null
+            )
+        }
+        if (result.second == null) throw IllegalArgumentException("Could not find A.I Move")
+
+        println("A.I Move: ${result.second}")
+        return result.first
+
+    }
+
+    private fun minValue(
         state: State,
         depth: Int,
         alpha: Int,
         beta: Int,
-        currentPlayerType: BoardPosition.ItemType,
         latestMove: Move?
     ): Triple<State, Move?, Int> {
-
-        //println(":::${playerType}::")
 
         if (depth == 0 || isGameOver(state)) {
             return Triple(state, latestMove, getStaticEvaluation(state.white, state.black))
         }
 
-        val player = if (currentPlayerType == BoardPosition.ItemType.W) state.white else state.black
-        val opponent = if (currentPlayerType == BoardPosition.ItemType.W) state.black else state.white
+        val player = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
+
+        var newBeta = beta
+        var minEvaluation = Int.MAX_VALUE
+        var minState = state
+        var minMove: Move? = null
 
         val moves = ArrayList<Move>()
         for (item in player.checkers) {
             moves.addAll(item.getValidMoves())
         }
+        for (move in moves) {
+            val clone = state.getClone()
+            clone.applyMove(move)
 
-        if (player.type == Constants.MAXIMIZING_PLAYER) {
-            var newAlpha = alpha
-            var maxEvaluation = Int.MIN_VALUE
-            var maxState = state
-            var maxMove: Move? = null
+            val result = maxValue(clone, depth - 1, alpha, newBeta, move)
+            val newEvaluation = result.third
 
-            for (move in moves) {
-                val clone = state.getClone()
-                clone.applyMove(move)
-
-                val result = getMinMax(clone, depth - 1, newAlpha, beta, opponent.type, move)
-                val newEvaluation = result.third
-
-                if (maxEvaluation < newEvaluation) {
-                    maxEvaluation = newEvaluation
-                    maxState = clone
-                    maxMove = move
-                }
-                newAlpha = max(alpha, newEvaluation)
-                if (beta <= alpha) break
-
-
+            if (minEvaluation > newEvaluation) {
+                minEvaluation = newEvaluation
+                minState = clone
+                minMove = move
             }
-            return Triple(maxState, maxMove, maxEvaluation)
+            newBeta = min(beta, newEvaluation)
+            if (beta <= alpha) break
+
 
         }
-        else {
-            var newBeta = beta
-            var minEvaluation = Int.MAX_VALUE
-            var minState = state
-            var minMove: Move? = null
-
-            for (move in moves) {
-                val clone = state.getClone()
-                clone.applyMove(move)
-
-                val result = getMinMax(clone, depth - 1, alpha, newBeta, opponent.type, move)
-                val newEvaluation = result.third
-
-                if (minEvaluation > newEvaluation) {
-                    minEvaluation = newEvaluation
-                    minState = clone
-                    minMove = move
-                }
-                newBeta = min(beta, newEvaluation)
-                if (beta <= alpha) break
-
-
-            }
-            return Triple(minState, minMove, minEvaluation)
-
-        }
+        return Triple(minState, minMove, minEvaluation)
 
     }
 
-    fun getMinMaxAIMove(): State {
-        val res = getMinMax(
-            board,
-            maxDepth,
-            Int.MIN_VALUE,
-            Int.MAX_VALUE,
-            playerType,
-            null
-        )
-        println("A.I move: ${res.second}")
+    private fun maxValue(
+        state: State,
+        depth: Int,
+        alpha: Int,
+        beta: Int,
+        latestMove: Move?
+    ) : Triple<State, Move?, Int> {
 
-        return res.first
+        if (depth == 0 || isGameOver(state)) {
+            return Triple(state, latestMove, getStaticEvaluation(state.white, state.black))
+        }
+
+        val player = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
+
+        var newAlpha = alpha
+        var maxEvaluation = Int.MIN_VALUE
+        var maxState = state
+        var maxMove: Move? = null
+
+        val moves = ArrayList<Move>()
+        for (item in player.checkers) {
+            moves.addAll(item.getValidMoves())
+        }
+        for (move in moves) {
+            val clone = state.getClone()
+            clone.applyMove(move)
+
+            val result = minValue(clone, depth - 1, newAlpha, beta, move)
+            val newEvaluation = result.third
+
+            if (maxEvaluation < newEvaluation) {
+                maxEvaluation = newEvaluation
+                maxState = clone
+                maxMove = move
+            }
+            newAlpha = max(alpha, newEvaluation)
+            if (beta <= alpha) break
+
+
+        }
+
+        return Triple(maxState, maxMove, maxEvaluation)
+
     }
-
 }
