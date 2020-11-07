@@ -66,7 +66,7 @@ fun main() {
 
 fun aiMove() : Boolean {
     val minMax = MinMaxAI(
-        maxDepth = 2,
+        maxDepth = Constants.MAX_DEPTH,
         root = board,
         ai
     )
@@ -94,7 +94,7 @@ fun aiMove() : Boolean {
 
 fun userMove() : Boolean {
     val minMax = MinMaxAI(
-        maxDepth = 2,
+        maxDepth = Constants.MAX_DEPTH,
         root = board,
         player
     )

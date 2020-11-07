@@ -3,6 +3,8 @@ package loa
 import java.lang.IllegalArgumentException
 import java.lang.Integer.max
 import java.lang.Integer.min
+import kotlin.math.ceil
+import kotlin.math.log2
 
 class MinMaxAI(
     private val maxDepth: Int,
@@ -125,12 +127,18 @@ class MinMaxAI(
 
     fun getMinMaxAIMove(): State {
 
+        val player = if (playerType == BoardPosition.ItemType.W) board.white else board.black
+
+        val optimalDepth = calculateOptimalDepth(player)
+
+        println("D:${optimalDepth}")
+
         val result: Triple<State, Move?, Int>
 
         if (playerType == Constants.MAXIMIZING_PLAYER) {
             result = maxValue(
                 root,
-                maxDepth,
+                optimalDepth,
                 Int.MIN_VALUE,
                 Int.MAX_VALUE,
                 null
@@ -138,7 +146,7 @@ class MinMaxAI(
         } else { // if (playerType == Constants.MINIMIZING_PLAYER)
             result = minValue(
                 root,
-                maxDepth,
+                optimalDepth,
                 Int.MIN_VALUE,
                 Int.MAX_VALUE,
                 null
@@ -240,7 +248,14 @@ class MinMaxAI(
 
     }
 
-    companion object {
+    private fun calculateOptimalDepth(player: Player) : Int {
+        val d = ceil(maxDepth - log2(player.checkers.size.toDouble())).toInt()
+
+        if (d == 0) return 1
+        return d
+    }
+
+    /*companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             val board = State()
@@ -253,7 +268,7 @@ class MinMaxAI(
             minMax.isGameOver(board)
             //minMax.findAdjacentPositions(0,1)
         }
-    }
+    }*/
 
 }
 
