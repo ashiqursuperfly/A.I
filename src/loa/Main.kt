@@ -11,8 +11,9 @@ var board = State()
 var turn = 0
 
 fun main() {
+    println(Constants.str)
     board.initDefaultBoard()
-    board.printBoard()
+    // board.printBoard()
 
 
     while (true) {

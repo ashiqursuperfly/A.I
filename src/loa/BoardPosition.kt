@@ -12,7 +12,7 @@ data class BoardPosition(
 	var bottomLeftToTopRight: LOA = LOA()
 ) {
 	enum class ItemType(var value: String) {
-		W("⚫"), B("⚪"), E("_");
+		B("⚫"), W("⚪"), E("➖");
 	}
 	companion object {
 		fun findAdjacentPositions(row: Int, col: Int): ArrayList<Pair<Int, Int>> {

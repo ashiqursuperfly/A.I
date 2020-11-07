@@ -164,17 +164,20 @@ data class State(
 
         sb.append(' ').append(' ').append(' ')
         for (i in 0 until Constants.BOARD_SIZE) {
-            sb.append(i).append(' ').append(' ').append(' ')
+            sb.append(Constants.digits[i]).append(' ').append(' ').append(' ').append(' ').append(' ')
         }
-        sb.append('\n')
+        /*sb.append(Constants.digits[Constants.BOARD_SIZE-1]).append(' ').append(' ').append(' ').append(' ')*/
+        sb.append('\n').append('\n')
 
         for (i in 0 until Constants.BOARD_SIZE) {
-            sb.append(i).append(' ').append(' ')
+            sb.append(Constants.digits[i]).append(' ').append(' ')
             for (j in 0 until Constants.BOARD_SIZE) {
                 sb.append(board[i]!![j].item.value).append(' ').append(Constants.BOARD_CHAR_SEPARATOR).append(' ')
             }
             sb.append('\n')
+            sb.append('\n')
         }
+
 
         println(sb.toString())
     }
