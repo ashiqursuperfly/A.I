@@ -1,8 +1,10 @@
-package loa
+package loa.minmax
 
+import loa.*
 import java.lang.IllegalArgumentException
 import java.lang.Integer.max
 import java.lang.Integer.min
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.log2
 
@@ -11,59 +13,6 @@ class MinMaxAI(
     private var root: State,
     private val playerType: BoardPosition.ItemType
 ) {
-
-    private fun getStaticEvaluation(state: State): Int {
-        return getMobilityEvaluation(state)
-    }
-
-    private fun getMobilityEvaluation(state: State): Int {
-
-        var maxMoves = 0
-        var minMoves = 0
-
-        val maximisingPlayer = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
-        val minimisingPlayer = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
-
-        for (block in minimisingPlayer.checkers) {
-            minMoves += block.getValidMoves().size
-        }
-        for (block in maximisingPlayer.checkers) {
-            maxMoves += block.getValidMoves().size
-        }
-
-        return maxMoves - minMoves
-    }
-
-    private fun getPieceSquareTableEvaluation(state: State): Int {
-
-        val pieceSquareTable = arrayOf(
-            intArrayOf(-80, -25, -20, -20, -20, -20, -25, -80),
-            intArrayOf(-25, 10, 10, 10, 10, 10, 10, -25),
-            intArrayOf(-20, 10, 25, 25, 25, 25, 10, -20),
-            intArrayOf(-20, 10, 25, 50, 50, 25, 10, -20),
-            intArrayOf(-20, 10, 25, 50, 50, 25, 10, -20),
-            intArrayOf(-20, 10, 25, 25, 25, 25, 10, -20),
-            intArrayOf(-25, 10, 10, 10, 10, 10, 10, -25),
-            intArrayOf(-80, -25, -20, -20, -20, -20, -25, -80)
-        )
-
-        var maxSum = 0
-        var minSum = 0
-
-        val maximisingPlayer = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
-        val minimisingPlayer = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
-
-        for (block in minimisingPlayer.checkers) {
-            minSum += pieceSquareTable[block.row][block.col]
-        }
-        for (block in maximisingPlayer.checkers) {
-            maxSum += pieceSquareTable[block.row][block.col]
-        }
-
-        return maxSum - minSum
-    }
-
-
 
     fun isGameOver(state: State): Boolean {
         if (isGameOver(state.black)) {
@@ -80,7 +29,7 @@ class MinMaxAI(
         val forest = HashSet<Pair<Int, Int>>()
 
         val availablePositions = HashSet<Pair<Int, Int>>()
-        availablePositions.addAll(findAdjacentPositions(player.checkers[0].row, player.checkers[0].col))
+        availablePositions.addAll(BoardPosition.findAdjacentPositions(player.checkers[0].row, player.checkers[0].col))
         forest.add(Pair(player.checkers[0].row, player.checkers[0].col))
 
         var totalConnectedNodes = 1 // 0 is by default in the forest
@@ -100,7 +49,7 @@ class MinMaxAI(
                 val it = Pair(item.row, item.col)
                 availablePositions.remove(it)
                 forest.add(it)
-                val uniqueAdjacent = findAdjacentPositions(item.row, item.col).filter {
+                val uniqueAdjacent = BoardPosition.findAdjacentPositions(item.row, item.col).filter {
                     !forest.contains(it)
                 }
                 availablePositions.addAll(uniqueAdjacent)
@@ -109,44 +58,6 @@ class MinMaxAI(
         }
 
         return true
-    }
-
-    private fun findAdjacentPositions(row: Int, col: Int): ArrayList<Pair<Int, Int>> {
-
-        val list = ArrayList<Pair<Int, Int>>()
-
-        val top = row - 1
-        val left = col - 1
-        val down = row + 1
-        val right = col + 1
-
-        if (top >= 0) {
-            list.add(Pair(top, col))
-            if (left >= 0) {
-                list.add(Pair(top, left))
-            }
-            if (right < Constants.BOARD_SIZE) {
-                list.add(Pair(top, right))
-            }
-        }
-        if (down < Constants.BOARD_SIZE) {
-            list.add(Pair(down, col))
-            if (left >= 0) {
-                list.add(Pair(down, left))
-            }
-            if (right < Constants.BOARD_SIZE) {
-                list.add(Pair(down, right))
-            }
-        }
-        if (left >= 0) {
-            list.add(Pair(row, left))
-        }
-        if (right < Constants.BOARD_SIZE) {
-            list.add(Pair(row, right))
-        }
-
-        return list
-
     }
 
     fun getMinMaxAIMove(): State {
@@ -192,7 +103,7 @@ class MinMaxAI(
     ): Triple<State, Move?, Int> {
 
         if (depth == 0 || isGameOver(state)) {
-            return Triple(state, latestMove, getStaticEvaluation(state))
+            return Triple(state, latestMove, EvaluationFunctions.getStaticEvaluation(state))
         }
 
         val player = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
@@ -236,7 +147,7 @@ class MinMaxAI(
     ): Triple<State, Move?, Int> {
 
         if (depth == 0 || isGameOver(state)) {
-            return Triple(state, latestMove, getStaticEvaluation(state))
+            return Triple(state, latestMove, EvaluationFunctions.getStaticEvaluation(state))
         }
 
         val player = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
@@ -280,7 +191,7 @@ class MinMaxAI(
         return d
     }
 
-    /*companion object {
+    companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             val board = State()
@@ -290,10 +201,11 @@ class MinMaxAI(
                 ai
             )
             board.initDefaultBoard()
-            minMax.isGameOver(board)
+            //minMax.isGameOver(board)
             //minMax.findAdjacentPositions(0,1)
+
         }
-    }*/
+    }
 
 }
 

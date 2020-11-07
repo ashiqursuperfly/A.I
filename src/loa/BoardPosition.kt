@@ -14,7 +14,45 @@ data class BoardPosition(
 	enum class ItemType(var value: String) {
 		W("⚫"), B("⚪"), E("_");
 	}
+	companion object {
+		fun findAdjacentPositions(row: Int, col: Int): ArrayList<Pair<Int, Int>> {
 
+			val list = ArrayList<Pair<Int, Int>>()
+
+			val top = row - 1
+			val left = col - 1
+			val down = row + 1
+			val right = col + 1
+
+			if (top >= 0) {
+				list.add(Pair(top, col))
+				if (left >= 0) {
+					list.add(Pair(top, left))
+				}
+				if (right < Constants.BOARD_SIZE) {
+					list.add(Pair(top, right))
+				}
+			}
+			if (down < Constants.BOARD_SIZE) {
+				list.add(Pair(down, col))
+				if (left >= 0) {
+					list.add(Pair(down, left))
+				}
+				if (right < Constants.BOARD_SIZE) {
+					list.add(Pair(down, right))
+				}
+			}
+			if (left >= 0) {
+				list.add(Pair(row, left))
+			}
+			if (right < Constants.BOARD_SIZE) {
+				list.add(Pair(row, right))
+			}
+
+			return list
+
+		}
+	}
 
 	fun getLOA(endPos: BoardPosition) : LOA? {
 		return when {

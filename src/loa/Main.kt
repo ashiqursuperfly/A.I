@@ -1,5 +1,8 @@
 package loa
 
+import loa.minmax.EvaluationFunctions
+import loa.minmax.MinMaxAI
+
 
 val player = BoardPosition.ItemType.W
 val ai = BoardPosition.ItemType.B
@@ -81,6 +84,7 @@ fun aiMove() : Boolean {
     println("Time Taken : ${(endTime-startTime)/1000} s")
     board = result
     board.printBoard()
+    EvaluationFunctions.getConnectedness(board)
     turn++
 
     if (minMax.isGameOver(board)) {
@@ -109,6 +113,7 @@ fun userMove() : Boolean {
     println("Time Taken : ${(endTime-startTime)/1000} s")
     board = result
     board.printBoard()
+    EvaluationFunctions.getConnectedness(board)
     turn++
     if (minMax.isGameOver(board)) {
         println("$player WINS")
