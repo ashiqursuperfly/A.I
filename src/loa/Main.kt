@@ -1,11 +1,12 @@
 package loa
 
-import loa.minmax.EvaluationFunctions
 import loa.minmax.MinMaxAI
 
+var isBlackAI = false
+var isWhiteAI = true
+val black = BoardPosition.ItemType.B
+val white = BoardPosition.ItemType.W
 
-val player = BoardPosition.ItemType.W
-val ai = BoardPosition.ItemType.B
 var board = State()
 var turn = 0
 
@@ -13,11 +14,49 @@ fun main() {
     board.initDefaultBoard()
     board.printBoard()
 
+
+    while (true) {
+        println("Select Black Player's Type:\n1.Human \n2.AI")
+        val input = readLine()
+        when(input?.trim()) {
+            "1" -> {
+                isBlackAI = false
+                break
+            }
+            "2" -> {
+                isBlackAI = true
+                break
+            }
+            else -> {
+                println("Invalid Option")
+            }
+        }
+    }
+
+    while (true) {
+        println("Select White Player's Type:\n1.Human \n2.AI")
+        val input = readLine()
+        when(input?.trim()) {
+            "1" -> {
+                isWhiteAI = false
+                break
+            }
+            "2" -> {
+                isWhiteAI = true
+                break
+            }
+            else -> {
+                println("Invalid Option")
+            }
+        }
+    }
+
+
     while (true) {
 
         println("1. Get Checker Counts  \n2. ApplyMove \n3. PrintBoard")
 
-        val input = "2"
+        val input = if (isBlackAI && isWhiteAI) "2" else readLine()
 
         when (input?.trim()) {
             "1" -> {
@@ -36,20 +75,20 @@ fun main() {
             }
             "2" -> {
                 if (turn % 2 == 0) {
+                    // player1
                     println("BLACK's Turn")
-                    var res = false
-                    if (ai == BoardPosition.ItemType.B) res = aiMove()
-                    else res = userMove()
+
+                    val res = if (isBlackAI) aiMove(black) else userMove(black)
 
                     if (res) {
                         println("GAME-OVER")
                         break
                     }
                 } else {
+                    // player2
                     println("WHITE's Turn")
-                    var res = false
-                    if (ai == BoardPosition.ItemType.W) res = aiMove()
-                    else res = userMove()
+
+                    val res = if (isWhiteAI) aiMove(white) else userMove(white)
 
                     if (res) {
                         println("GAME-OVER")
@@ -67,88 +106,61 @@ fun main() {
     }
 }
 
-fun aiMove() : Boolean {
+fun aiMove(type: BoardPosition.ItemType) : Boolean {
+
     val minMax = MinMaxAI(
         maxDepth = Constants.MAX_DEPTH,
         root = board,
-        ai
+        type
     )
-    if (minMax.isGameOver(board)) {
-        println("$player WINS")
-        return true
-    }
+
     val startTime = System.currentTimeMillis()
     println("A.I is thinking !")
     val result = minMax.getMinMaxAIMove()
     val endTime = System.currentTimeMillis()
     println("Time Taken : ${(endTime-startTime)/1000} s")
+
     board = result
     board.printBoard()
-    EvaluationFunctions.getConnectedness(board)
     turn++
 
     if (minMax.isGameOver(board)) {
-        println("$ai WINS")
+        println("!! GAMEOVER !!")
         return true
     }
 
     return false
-
 }
 
-fun userMove() : Boolean {
-    val minMax = MinMaxAI(
-        maxDepth = Constants.MAX_DEPTH,
-        root = board,
-        player
-    )
-    if (minMax.isGameOver(board)) {
-        println("$ai WINS")
-        return true
-    }
-    println("A.I is thinking !")
-    val startTime = System.currentTimeMillis()
-    val result = minMax.getMinMaxAIMove()
-    val endTime = System.currentTimeMillis()
-    println("Time Taken : ${(endTime-startTime)/1000} s")
-    board = result
-    board.printBoard()
-    EvaluationFunctions.getConnectedness(board)
-    turn++
-    if (minMax.isGameOver(board)) {
-        println("$player WINS")
-        return true
-    }
-    return false
+fun userMove(type: BoardPosition.ItemType) : Boolean {
 
-    /*println("Select Checker: \nFormat:- r:c")
+    println("Select Checker: \nFormat:- r:c")
 
     val coords = readLine()?.split(':')
-    if (coords.isNullOrEmpty()) return
+    if (coords.isNullOrEmpty()) return false
 
     val row = coords[0].toInt()
     val col = coords[1].toInt()
 
-
     val bp = board.board[row]!![col]
     if (bp.item == BoardPosition.ItemType.W && turn % 2 == 0) {
         println("Please Select a BLACK Checker")
-        return
+        return false
     }
     else if (bp.item == BoardPosition.ItemType.B && turn % 2 != 0) {
         println("Please Select a WHITE Checker")
-        return
+        return false
     }
     else if (bp.item == BoardPosition.ItemType.E) {
         println("Selected Board Position EMPTY !!")
-        return
+        return false
     }
 
     val moves = bp.getValidMoves()
     if (!moves.isNullOrEmpty()) println("Select Move:")
     else {
         println("No Valid Moves")
-        return
+        return false
     }
     for (item in moves.withIndex()) {
         println("${item.index}. ${moves[item.index]}")
@@ -161,17 +173,25 @@ fun userMove() : Boolean {
         val r = clone.applyMove(moves[moveIdx])
         if (r) {
             println("After Applying move:$moveIdx")
-
-            *//*clone.printBoard()
-            println("Before Applying move")
-            init.printBoard()*//*
             board = clone
             board.printBoard()
             turn++
+
+            val minMax = MinMaxAI(
+                maxDepth = Constants.MAX_DEPTH,
+                root = board,
+                type
+            )
+            if (minMax.isGameOver(board)) {
+                println("!! GAMEOVER !!")
+                return true
+            }
         } else {
             println("Invalid Move")
         }
-    }*/
+    }
+
+    return false
 
 
 }

@@ -4,7 +4,6 @@ import loa.*
 import java.lang.IllegalArgumentException
 import java.lang.Integer.max
 import java.lang.Integer.min
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.log2
 
@@ -191,21 +190,21 @@ class MinMaxAI(
         return d
     }
 
-    companion object {
+    /*companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             val board = State()
             val minMax = MinMaxAI(
                 maxDepth = 3,
                 root = board,
-                ai
+                player2
             )
             board.initDefaultBoard()
             //minMax.isGameOver(board)
             //minMax.findAdjacentPositions(0,1)
 
         }
-    }
+    }*/
 
 }
 

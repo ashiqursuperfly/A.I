@@ -6,7 +6,7 @@ import kotlin.math.abs
 object EvaluationFunctions {
 
     fun getStaticEvaluation(state: State): Int {
-        return getAreaEvaluation(state) + 2*getConnectedness(state) + 3*getMobilityEvaluation(state) + 4*getPieceSquareTableEvaluation(state)
+        return getAreaEvaluation(state) + 2 * getConnectedness(state) + 3 * getMobilityEvaluation(state) + 4 * getPieceSquareTableEvaluation(state)
     }
 
     private fun getAreaEvaluation(state: State): Int {
