@@ -12,7 +12,29 @@ class MinMaxAI(
     private val playerType: BoardPosition.ItemType
 ) {
 
-    private fun getStaticEvaluation(white: Player, black: Player): Int {
+    private fun getStaticEvaluation(state: State): Int {
+        return getMobilityEvaluation(state)
+    }
+
+    private fun getMobilityEvaluation(state: State): Int {
+
+        var maxMoves = 0
+        var minMoves = 0
+
+        val maximisingPlayer = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
+        val minimisingPlayer = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
+
+        for (block in minimisingPlayer.checkers) {
+            minMoves += block.getValidMoves().size
+        }
+        for (block in maximisingPlayer.checkers) {
+            maxMoves += block.getValidMoves().size
+        }
+
+        return maxMoves - minMoves
+    }
+
+    private fun getPieceSquareTableEvaluation(state: State): Int {
 
         val pieceSquareTable = arrayOf(
             intArrayOf(-80, -25, -20, -20, -20, -20, -25, -80),
@@ -28,8 +50,8 @@ class MinMaxAI(
         var maxSum = 0
         var minSum = 0
 
-        val maximisingPlayer = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) white else black
-        val minimisingPlayer = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) white else black
+        val maximisingPlayer = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
+        val minimisingPlayer = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
 
         for (block in minimisingPlayer.checkers) {
             minSum += pieceSquareTable[block.row][block.col]
@@ -40,6 +62,8 @@ class MinMaxAI(
 
         return maxSum - minSum
     }
+
+
 
     fun isGameOver(state: State): Boolean {
         if (isGameOver(state.black)) {
@@ -168,7 +192,7 @@ class MinMaxAI(
     ): Triple<State, Move?, Int> {
 
         if (depth == 0 || isGameOver(state)) {
-            return Triple(state, latestMove, getStaticEvaluation(state.white, state.black))
+            return Triple(state, latestMove, getStaticEvaluation(state))
         }
 
         val player = if (Constants.MINIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
@@ -212,7 +236,7 @@ class MinMaxAI(
     ): Triple<State, Move?, Int> {
 
         if (depth == 0 || isGameOver(state)) {
-            return Triple(state, latestMove, getStaticEvaluation(state.white, state.black))
+            return Triple(state, latestMove, getStaticEvaluation(state))
         }
 
         val player = if (Constants.MAXIMIZING_PLAYER == BoardPosition.ItemType.W) state.white else state.black
@@ -252,6 +276,7 @@ class MinMaxAI(
         val d = ceil(maxDepth - log2(player.checkers.size.toDouble())).toInt()
 
         if (d == 0) return 1
+        // else if (d > maxDepth) maxDepth
         return d
     }
 
