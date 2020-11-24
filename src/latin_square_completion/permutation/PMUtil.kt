@@ -3,7 +3,6 @@ package latin_square_completion.permutation
 class Permutation(
     val data: String
 ) {
-
     val results = ArrayList<String>()
 
     fun calculatePermute(): ArrayList<String> {
