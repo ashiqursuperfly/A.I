@@ -33,9 +33,11 @@ fun main() {
     val latinSquare = LatinSquare(data = data)
     latinSquare.initColHashSet()
     println(latinSquare)
+    val startTime = System.currentTimeMillis()
     LatinSquareSolver.solve(latinSquare)
-    println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount}")
-
+    val endTime = System.currentTimeMillis()
+    println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount} ${LatinSquareSolver.solutionCount}")
+    println((endTime-startTime)/1000.0f)
     /*
     2 -> 2
     3 -> 12

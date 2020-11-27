@@ -59,7 +59,7 @@ object LatinSquareSolver {
 
     fun solve(latin: LatinSquare) {
 
-        if (solutionCount > 0) return
+        // if (solutionCount > 0) return
 
         val nextUnfinishedRow = getUnFinishedRow(latin.data)
 

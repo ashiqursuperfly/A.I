@@ -26,15 +26,7 @@ data class LatinSquare (
     fun clone(): LatinSquare {
         val copied = ArrayList<ArrayList<Int>>()
         for ((i, row) in data.withIndex()) {
-            copied.add(ArrayList())
-            for ((j, col) in row.withIndex()) {
-                copied[i].add(-1)
-            }
-        }
-        for ((i, row) in data.withIndex()) {
-            for ((j, col) in row.withIndex()) {
-                copied[i][j] = col
-            }
+            copied.add(ArrayList(row.toMutableList()))
         }
         val copy = LatinSquare(data = copied)
         copy.initColHashSet()
