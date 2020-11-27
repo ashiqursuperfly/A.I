@@ -5,7 +5,9 @@ import utils.permutation.Permutation
 
 object LatinSquareSolver {
 
+    var consistencyCheckingCount = 0
     var solutionCount = 0
+    var failCount = 0
 
     private fun getUnFinishedRow(data: ArrayList<ArrayList<Int>>): Int {
         for ((index, row) in data.withIndex()) {
@@ -35,6 +37,9 @@ object LatinSquareSolver {
     }
 
     private fun completeRow(nextUnfinishedRow: Int, latin: LatinSquare, values: ArrayList<Int>): Boolean {
+
+        consistencyCheckingCount++
+
         var j = 0
 
         for (i in latin.data.indices) {
@@ -46,6 +51,8 @@ object LatinSquareSolver {
                 j++
             }
         }
+
+
 
         return true
     }
@@ -74,6 +81,7 @@ object LatinSquareSolver {
                 // println(copiedData)
                 solve(copiedData)
             }
+            else failCount++
         }
     }
 

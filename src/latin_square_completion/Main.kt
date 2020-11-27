@@ -34,7 +34,7 @@ fun main() {
     latinSquare.initColHashSet()
     println(latinSquare)
     LatinSquareSolver.solve(latinSquare)
-    println("Count: ${LatinSquareSolver.solutionCount}")
+    println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount}")
 
     /*
     2 -> 2
