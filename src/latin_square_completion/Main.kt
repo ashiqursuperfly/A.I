@@ -17,7 +17,7 @@ fun processLine(line: String) {
     } else {
         val items = line.split(",")
         for ((j, item) in items.withIndex()) {
-            data[i-1][j] = Integer.parseInt(item.trim())
+            data[i - 1][j] = Integer.parseInt(item.trim())
         }
     }
     i++
@@ -31,19 +31,20 @@ fun main() {
     )
 
     val latinSquare = LatinSquare(data = data)
-    latinSquare.initColHashSet()
     println(latinSquare)
+
     val startTime = System.currentTimeMillis()
     LatinSquareSolver.solve(latinSquare)
     val endTime = System.currentTimeMillis()
     println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount} ${LatinSquareSolver.solutionCount}")
-    println((endTime-startTime)/1000.0f)
+    println((endTime - startTime) / 1000.0f)
+
     /*
     2 -> 2
     3 -> 12
     4 -> 576
     5 -> 161280
-     */
+    */
 }
 
 

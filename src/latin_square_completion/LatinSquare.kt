@@ -4,10 +4,28 @@ import java.lang.StringBuilder
 
 data class LatinSquare (
     var data: ArrayList<ArrayList<Int>>,
-    var colHashSets : ArrayList<HashSet<Int>> = ArrayList()
+    var colHashSets : ArrayList<HashSet<Int>> = ArrayList(),
+    var rowHashSets : ArrayList<HashSet<Int>> = ArrayList()
 ) {
 
-    fun initColHashSet() {
+    init {
+       initColHashSet()
+       initRowHashSets()
+    }
+
+    private fun initRowHashSets() {
+        rowHashSets = ArrayList()
+
+        for (i in data.indices) {
+            rowHashSets.add(HashSet())
+        }
+
+        for ((i, row) in data.withIndex()) {
+            rowHashSets[i].addAll(row.filter { it != Constants.EMPTY })
+        }
+    }
+
+    private fun initColHashSet() {
         colHashSets = ArrayList()
 
         for (i in data.indices) {
@@ -28,9 +46,7 @@ data class LatinSquare (
         for ((i, row) in data.withIndex()) {
             copied.add(ArrayList(row.toMutableList()))
         }
-        val copy = LatinSquare(data = copied)
-        copy.initColHashSet()
-        return copy
+        return LatinSquare(data = copied)
     }
 
     override fun toString(): String {

@@ -48,6 +48,7 @@ object LatinSquareSolver {
                 if (latin.colHashSets[i].contains(value)) return false
                 latin.data[nextUnfinishedRow][i] = value
                 latin.colHashSets[i].add(value)
+                latin.rowHashSets[nextUnfinishedRow].add(value)
                 j++
             }
         }
@@ -59,7 +60,7 @@ object LatinSquareSolver {
 
     fun solve(latin: LatinSquare) {
 
-        // if (solutionCount > 0) return
+        if (solutionCount > 0) return
 
         val nextUnfinishedRow = getUnFinishedRow(latin.data)
 
@@ -72,13 +73,13 @@ object LatinSquareSolver {
         val remainingClues = getRemainingClues(latin.data[nextUnfinishedRow])
         val permutation = Permutation(remainingClues)
         permutation.calculatePermute()
-
+        // println("remaining clues: ${remainingClues.size}")
         for (item in permutation.results) {
             val copiedData = latin.clone()
             // println(copiedData)
             // println(item)
             if (completeRow(nextUnfinishedRow, copiedData, item)) {
-                // println(copiedData)
+                // println(nextUnfinishedRow)
                 solve(copiedData)
             }
             else failCount++
