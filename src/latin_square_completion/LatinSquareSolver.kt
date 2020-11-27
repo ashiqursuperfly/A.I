@@ -1,7 +1,7 @@
-package latin_square_completion.permutation
+package latin_square_completion
 
-import latin_square_completion.permutation.Constants.EMPTY
-import latin_square_completion.LatinSquare
+import latin_square_completion.Constants.EMPTY
+import utils.permutation.Permutation
 
 object LatinSquareSolver {
 

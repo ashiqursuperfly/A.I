@@ -1,5 +1,6 @@
 package graphcolouring
 
+import utils.FileUtil
 import graphcolouring.models.Course
 import graphcolouring.models.Student
 

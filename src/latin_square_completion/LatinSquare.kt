@@ -1,6 +1,5 @@
 package latin_square_completion
 
-import latin_square_completion.permutation.Constants
 import java.lang.StringBuilder
 
 data class LatinSquare (

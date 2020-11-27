@@ -1,4 +1,4 @@
-package latin_square_completion.permutation
+package utils.permutation
 
 class Permutation(
     val data: ArrayList<Int>
@@ -22,13 +22,6 @@ class Permutation(
         }
     }
 
-    /**
-     * Swap Characters at position
-     * @param a string value
-     * @param i position 1
-     * @param j position 2
-     * @return swapped string
-     */
     private fun swap(a: ArrayList<Int>, i: Int, j: Int): ArrayList<Int> {
         val temp: Int
         val charArray = ArrayList(a)

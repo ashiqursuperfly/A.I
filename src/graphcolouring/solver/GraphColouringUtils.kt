@@ -1,8 +1,7 @@
 package graphcolouring.solver
 
 import graphcolouring.CourseGraph
-import graphcolouring.FileUtil
-import graphcolouring.models.Course
+import utils.FileUtil
 import graphcolouring.models.Course.Companion.UNCOLORED
 import java.lang.StringBuilder
 import kotlin.math.abs
