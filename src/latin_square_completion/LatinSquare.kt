@@ -1,16 +1,13 @@
 package latin_square_completion
 
-import java.lang.StringBuilder
-
-data class LatinSquare (
+data class LatinSquare(
     var data: ArrayList<ArrayList<Int>>,
-    var colHashSets : ArrayList<HashSet<Int>> = ArrayList(),
-    var rowHashSets : ArrayList<HashSet<Int>> = ArrayList()
+    var colHashSets: ArrayList<HashSet<Int>> = ArrayList(),
+    var rowHashSets: ArrayList<HashSet<Int>> = ArrayList(),
 ) {
-
     init {
-       initColHashSet()
-       initRowHashSets()
+        initColHashSet()
+        initRowHashSets()
     }
 
     private fun initRowHashSets() {
@@ -21,7 +18,7 @@ data class LatinSquare (
         }
 
         for ((i, row) in data.withIndex()) {
-            rowHashSets[i].addAll(row.filter { it != Constants.EMPTY })
+            rowHashSets[i].addAll(row)
         }
     }
 
@@ -34,9 +31,7 @@ data class LatinSquare (
 
         for (row in data) {
             for ((index, item) in row.withIndex()) {
-                if (item != Constants.EMPTY) {
-                    colHashSets[index].add(item)
-                }
+                colHashSets[index].add(item)
             }
         }
     }
@@ -55,8 +50,7 @@ data class LatinSquare (
             for (item in row) {
                 if (item < 10) {
                     sb.append(' ').append(item)
-                }
-                else sb.append(item)
+                } else sb.append(item)
                 sb.append(' ').append(' ')
             }
             sb.append('\n')

@@ -37,7 +37,7 @@ fun main() {
     LatinSquareSolver.solve(latinSquare)
     val endTime = System.currentTimeMillis()
     println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount} ${LatinSquareSolver.solutionCount}")
-    println((endTime - startTime) / 1000.0f)
+    println((endTime - startTime))
 
     /*
     2 -> 2
