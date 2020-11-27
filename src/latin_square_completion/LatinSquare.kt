@@ -45,7 +45,11 @@ data class LatinSquare (
         val sb = StringBuilder()
         for (row in data) {
             for (item in row) {
-                sb.append(item).append(' ')
+                if (item < 10) {
+                    sb.append(' ').append(item)
+                }
+                else sb.append(item)
+                sb.append(' ').append(' ')
             }
             sb.append('\n')
         }

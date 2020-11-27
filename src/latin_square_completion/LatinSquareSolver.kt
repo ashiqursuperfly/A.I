@@ -5,6 +5,8 @@ import utils.permutation.Permutation
 
 object LatinSquareSolver {
 
+    var solutionCount = 0
+
     private fun getUnFinishedRow(data: ArrayList<ArrayList<Int>>): Int {
         for ((index, row) in data.withIndex()) {
             for (col in row) {
@@ -49,15 +51,19 @@ object LatinSquareSolver {
     }
 
     fun solve(latin: LatinSquare) {
+
+        if (solutionCount > 0) return
+
         val nextUnfinishedRow = getUnFinishedRow(latin.data)
 
         if (nextUnfinishedRow == -1) {
             println("Solution:\n${latin}")
+            solutionCount++
             return
         }
 
-        val emptyIDXs = getRemainingClues(latin.data[nextUnfinishedRow])
-        val permutation = Permutation(emptyIDXs)
+        val remainingClues = getRemainingClues(latin.data[nextUnfinishedRow])
+        val permutation = Permutation(remainingClues)
         permutation.calculatePermute()
 
         for (item in permutation.results) {
