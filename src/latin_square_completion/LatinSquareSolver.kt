@@ -11,19 +11,16 @@ import kotlin.test.assertEquals
 
 object LatinSquareSolver {
 
-    var heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION
+    var heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST
     var consistencyCheckingCount = 0
+    var nodeCount = 0
     var solutionCount = 0
     var failCount = 0
 
     private fun getUnFinishedRow(latin: LatinSquare): Int {
 
         for ((index, row) in latin.data.withIndex()) {
-            for (col in row) {
-                if (col == EMPTY) {
-                    return index
-                }
-            }
+            if (row.contains(EMPTY)) return index
         }
 
         return -1
@@ -35,23 +32,20 @@ object LatinSquareSolver {
             Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST -> {
                 SmallestDomainFirst()
             }
-            Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION -> BrelazSDFMDD()
+            Constants.LatinSquareHeuristic.BRELAZ -> BrelazSDFMDD()
             Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE -> MaxDynamicDegree()
         }
 
         val priorityQueue: PriorityQueue<LatinRowCompareData> = PriorityQueue(comparator)
 
         for ((index, row) in latin.data.withIndex()) {
-            for (col in row) {
-                if (col == EMPTY) {
-                    priorityQueue.add(
-                        LatinRowCompareData(
-                            rowIdx = index,
-                            latinSquare = latin
-                        )
+            if (row.contains(EMPTY)) {
+                priorityQueue.add(
+                    LatinRowCompareData(
+                        rowIdx = index,
+                        latinSquare = latin
                     )
-                    break
-                }
+                )
             }
         }
 
@@ -103,12 +97,14 @@ object LatinSquareSolver {
 
         if (solutionCount > 0) return
 
+        nodeCount++
+
         val nextUnfinishedRow = if (useHeuristic) getUnFinishedRowHeuristic(latin) else getUnFinishedRow(latin)
 
         if (nextUnfinishedRow == -1) {
             println("Solution:\n${latin}")
             solutionCount++
-            println("Count: $failCount $consistencyCheckingCount $solutionCount")
+            println("Fail: $failCount Nodes:$nodeCount ConsistencyCount:$consistencyCheckingCount Solutions:$solutionCount")
             return
         }
 
