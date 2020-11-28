@@ -1,6 +1,7 @@
 package latin_square_completion
 
 import latin_square_completion.Constants.EMPTY
+import latin_square_completion.heuristics.MaxDynamicDegree
 import latin_square_completion.heuristics.SmallestDomainFirst
 import utils.permutation.Permutation
 import java.util.*
@@ -9,7 +10,7 @@ import kotlin.test.assertEquals
 
 object LatinSquareSolver {
 
-    val heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST
+    val heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE
     var consistencyCheckingCount = 0
     var solutionCount = 0
     var failCount = 0
@@ -34,7 +35,7 @@ object LatinSquareSolver {
                 SmallestDomainFirst()
             }
             Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION -> TODO()
-            Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE -> TODO()
+            Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE -> MaxDynamicDegree()
         }
 
         val priorityQueue: PriorityQueue<LatinRowCompareData> = PriorityQueue(comparator)
@@ -75,12 +76,11 @@ object LatinSquareSolver {
 
     private fun completeRow(nextUnfinishedRow: Int, latin: LatinSquare, values: ArrayList<Int>): Boolean {
 
-        consistencyCheckingCount++
-
         var j = 0
 
         for (i in latin.data.indices) {
             if (latin.data[nextUnfinishedRow][i] == EMPTY) {
+                consistencyCheckingCount++
                 val value = values[j]
                 if (latin.colHashSets[i].contains(value)) return false
 
@@ -96,11 +96,11 @@ object LatinSquareSolver {
         return true
     }
 
-    fun solve(latin: LatinSquare) {
+    fun solve(latin: LatinSquare, useHeuristic: Boolean = true) {
 
         if (solutionCount > 0) return
 
-        val nextUnfinishedRow = getUnFinishedRowHeuristic(latin)  // getUnFinishedRow(latin)
+        val nextUnfinishedRow = if (useHeuristic) getUnFinishedRowHeuristic(latin) else getUnFinishedRow(latin)
 
         if (nextUnfinishedRow == -1) {
             println("Solution:\n${latin}")
@@ -115,7 +115,7 @@ object LatinSquareSolver {
         for (item in permutation.results) {
             val copiedData = latin.clone()
             if (completeRow(nextUnfinishedRow, copiedData, item)) {
-                solve(copiedData)
+                solve(copiedData, useHeuristic)
             } else failCount++
         }
     }

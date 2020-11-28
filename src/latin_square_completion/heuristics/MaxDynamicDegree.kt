@@ -3,7 +3,7 @@ package latin_square_completion.heuristics
 import latin_square_completion.Constants
 import latin_square_completion.LatinRowCompareData
 
-class SmallestDomainFirst : Comparator<LatinRowCompareData> {
+class MaxDynamicDegree : Comparator<LatinRowCompareData> {
 
     private fun calculateValue(latinRowCompareData: LatinRowCompareData): Int {
         val row = latinRowCompareData.latinSquare.data[latinRowCompareData.rowIdx]
@@ -11,11 +11,7 @@ class SmallestDomainFirst : Comparator<LatinRowCompareData> {
         var sum = 0
         for ((j, item) in row.withIndex()) {
             if (item == Constants.EMPTY) {
-                val hashSet = HashSet<Int>()
-                hashSet.addAll(rowHashSet)
-                hashSet.addAll(latinRowCompareData.latinSquare.colHashSets[j])
-
-                sum += (row.size - hashSet.size)
+                sum += (2*row.size - rowHashSet.size - latinRowCompareData.latinSquare.colHashSets[j].size)
             }
         }
         return sum
