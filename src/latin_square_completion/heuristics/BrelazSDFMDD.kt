@@ -4,7 +4,6 @@ import latin_square_completion.LatinRowCompareData
 
 class BrelazSDFMDD : Comparator<LatinRowCompareData> {
 
-
     override fun compare(o1: LatinRowCompareData, o2: LatinRowCompareData): Int {
         val sdf = SmallestDomainFirst()
         val c1 = sdf.calculateValue(o1)
@@ -15,10 +14,8 @@ class BrelazSDFMDD : Comparator<LatinRowCompareData> {
         }
 
         val mdd = MaxDynamicDegree()
-        val c11 = mdd.calculateValue(o1)
-        val c12 = mdd.calculateValue(o2)
 
-        return c11.compareTo(c12)
+        return mdd.compare(o1, o2)
     }
 
 

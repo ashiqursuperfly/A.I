@@ -33,7 +33,7 @@ fun main() {
     val latinSquare = LatinSquare(data = latinSquareInitData)
     println(latinSquare)
 
-    LatinSquareSolver.heuristic = Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE
+    LatinSquareSolver.heuristic = Constants.LatinSquareHeuristic.BRELAZ
 
     val startTime = System.currentTimeMillis()
     LatinSquareSolver.solve(latinSquare, true)
