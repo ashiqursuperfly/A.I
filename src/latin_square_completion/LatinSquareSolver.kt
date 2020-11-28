@@ -1,6 +1,7 @@
 package latin_square_completion
 
 import latin_square_completion.Constants.EMPTY
+import latin_square_completion.heuristics.BrelazSDFMDD
 import latin_square_completion.heuristics.MaxDynamicDegree
 import latin_square_completion.heuristics.SmallestDomainFirst
 import utils.permutation.Permutation
@@ -10,7 +11,7 @@ import kotlin.test.assertEquals
 
 object LatinSquareSolver {
 
-    val heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST
+    var heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION
     var consistencyCheckingCount = 0
     var solutionCount = 0
     var failCount = 0
@@ -34,7 +35,7 @@ object LatinSquareSolver {
             Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST -> {
                 SmallestDomainFirst()
             }
-            Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION -> TODO()
+            Constants.LatinSquareHeuristic.BRELAZ_HIGHEST_COLOR_SATURATION -> BrelazSDFMDD()
             Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE -> MaxDynamicDegree()
         }
 

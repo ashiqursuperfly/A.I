@@ -5,7 +5,7 @@ import latin_square_completion.LatinRowCompareData
 
 class MaxDynamicDegree : Comparator<LatinRowCompareData> {
 
-    private fun calculateValue(latinRowCompareData: LatinRowCompareData): Int {
+   fun calculateValue(latinRowCompareData: LatinRowCompareData): Int {
         val row = latinRowCompareData.latinSquare.data[latinRowCompareData.rowIdx]
         val rowHashSet = latinRowCompareData.latinSquare.rowHashSets[latinRowCompareData.rowIdx]
         var sum = 0
