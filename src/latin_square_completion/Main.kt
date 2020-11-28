@@ -36,14 +36,13 @@ fun main() {
     val startTime = System.currentTimeMillis()
     LatinSquareSolver.solve(latinSquare, true)
     val endTime = System.currentTimeMillis()
-    println("Count: ${LatinSquareSolver.failCount} ${LatinSquareSolver.consistencyCheckingCount} ${LatinSquareSolver.solutionCount}")
     println((endTime - startTime))
 
     /*
-    2 -> 2
-    3 -> 12
-    4 -> 576
-    5 -> 161280
+        2 -> 2
+        3 -> 12
+        4 -> 576
+        5 -> 161280
     */
 }
 

@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 
 object LatinSquareSolver {
 
-    val heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.MAX_DYNAMIC_DEGREE
+    val heuristic: Constants.LatinSquareHeuristic = Constants.LatinSquareHeuristic.SMALLEST_DOMAIN_FIRST
     var consistencyCheckingCount = 0
     var solutionCount = 0
     var failCount = 0
@@ -80,7 +80,9 @@ object LatinSquareSolver {
 
         for (i in latin.data.indices) {
             if (latin.data[nextUnfinishedRow][i] == EMPTY) {
+
                 consistencyCheckingCount++
+
                 val value = values[j]
                 if (latin.colHashSets[i].contains(value)) return false
 
@@ -105,6 +107,7 @@ object LatinSquareSolver {
         if (nextUnfinishedRow == -1) {
             println("Solution:\n${latin}")
             solutionCount++
+            println("Count: $failCount $consistencyCheckingCount $solutionCount")
             return
         }
 
